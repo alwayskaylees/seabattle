@@ -3,6 +3,7 @@ import sys
 
 
 class Screen():
+
     def __init__(self, title, width=440, height=445,
                  fill=(0, 0, 255)):
         self.height = height
@@ -76,8 +77,11 @@ class Button():
 
 
 py.init()
+py.font.init()
+
 menuScreen = Screen("Menu Screen")
-control_bar = Screen("Sea battle")
+game_window = Screen("Control")
+window = Screen("Exit")
 win = menuScreen.makeCurrentScreen()
 MENU_BUTTON = Button(150, 150, 120, 50, ("black"),
                      ("black"), "TimesNewRoman",
@@ -88,131 +92,136 @@ MENU_BUTTON2 = Button(185, 55, 130, 50, ("white"),
 MENU_BUTTON3 = Button(150, 220, 120, 50, ("black"),
                       ("black"), "TimesNewRoman",
                       ("white"), "Quit Game")
+QUIT_BUTTON = Button(150, 300, 120, 50, ("black"),
+                     ("black"), "TimesNewRoman",
+                     ("red"), "Quit")
+QUIT_BUTTON2 = Button(100, 55, 230, 150, ("white"),
+                      ("white"), "TimesNewRoman",
+                      ("red"), "Goodbye")
+
 done = False
-toggle = False
 while not done:
     menuScreen.screenUpdate()
-    control_bar.screenUpdate()
+    game_window.screenUpdate()
+    window.screenUpdate()
     mouse_pos = py.mouse.get_pos()
     mouse_click = py.mouse.get_pressed()
     keys = py.key.get_pressed()
-    if menuScreen.checkUpdate(("white")):
-        control_barbutton = MENU_BUTTON.focusCheck(mouse_pos,
-                                                   mouse_click)
-        control_barbutton2 = MENU_BUTTON3.focusCheck(mouse_pos,
-                                                     mouse_click)
+    if menuScreen.checkUpdate((255, 255, 255)):
+        start_button = MENU_BUTTON.focusCheck(mouse_pos,
+                                              mouse_click)
+        quit_button = MENU_BUTTON3.focusCheck(mouse_pos,
+                                              mouse_click)
         MENU_BUTTON.showButton(menuScreen.returnTitle())
         MENU_BUTTON2.showButton(menuScreen.returnTitle())
         MENU_BUTTON3.showButton(menuScreen.returnTitle())
-        if control_barbutton2:
-            size = 25
-            board = 3
-            width = size * 21 + board * 20
-            height = size * 11 + board * 10
-            py.init()
-            screen = py.display.set_mode((width, height))
-            py.display.set_caption('quit')
-            font = py.font.SysFont("notosans", 120)
-
-
-            def greed():
-                num = font.render("Good bye", True, "red")
-                screen.blit(num, (109, 104))
-
-
-            def main():
-                game_over = False
-                screen.fill("black")
-                while not game_over:
-                    for event in py.event.get():
-                        if event.type == py.QUIT:
-                            py.quit()
-                            sys.exit(0)
-                    greed()
-                    py.display.update()
-
-
-            main()
-            py.quit()
-        elif control_barbutton:
-            win = control_bar.makeCurrentScreen()
+        if start_button:
+            win = game_window.makeCurrentScreen()
             menuScreen.endCurrentScreen()
-            size = 25
-            board = 3
-            width = size * 21 + board * 20
-            height = size * 11 + board * 10
-            py.init()
-            screen = py.display.set_mode((width, height))
-            py.display.set_caption('sea battle')
-            font = py.font.SysFont("notosans", 20)
-            sheet1 = [[0] * 15 for i in range(15)]
-            sheet2 = [[0] * 10 for i in range(10, 21)]
+        if quit_button:
+            win = window.makeCurrentScreen()
+            menuScreen.endCurrentScreen()
+
+    elif window.checkUpdate((255, 255, 255)):
+        exit_button = QUIT_BUTTON.focusCheck(mouse_pos,
+                                             mouse_click)
+        QUIT_BUTTON.showButton(window.returnTitle())
+        QUIT_BUTTON2.showButton(window.returnTitle())
+        if exit_button:
+            sys.exit()
+
+    elif game_window.checkUpdate((255, 255, 255)):
+        size = 25
+        board = 3
+        width = size * 21 + board * 20
+        height = size * 15 + board * 10
+        py.init()
+        screen = py.display.set_mode((width, height))
+        py.display.set_caption('sea battle')
+        font = py.font.SysFont("notosans", 20)
+        font3 = py.font.SysFont("notosans", 40)
+        sheet1 = [[0] * 15 for i in range(15)]
+        sheet2 = [[0] * 10 for i in range(10, 21)]
 
 
-            def greed():
-                let = ["J", "I", "H", "G", "F", "E", "D", "C", "B", "A"]
-                for row in range(1, 11):
-                    for col in range(11, 21):
-                        x = col * size + (col + 1) * board
-                        y = row * size + (row + 1) * board
-                        py.draw.rect(screen, "white", (x, y, size, size))
-                    num = font.render(str(row), True, "red")
-                    letters = font.render(let[row - 1], True, "red")
-                    screen.blit(num, (x - 273, y + 4))
-                    screen.blit(letters, ((x + 5) - (row - 1) * 28, (y + 5) - (row) * 28))
-                    screen.blit(letters, ((x - 300) - (row - 1) * 28, (y + 5) - (row) * 28))
-                for row in range(1, 11):
-                    for col in range(10):
-                        x = col * size + (col + 1) * board
-                        y = row * size + (row + 1) * board
-                        py.draw.rect(screen, "white", (x, y, size, size))
-                        if sheet1[row][col] == 'x':
-                            py.draw.circle(screen, "green", (x + size // 2, y + size // 2), size // 2 - 3)
+        def button():
+            py.draw.rect(screen, "white", (197, 336, 80, 40))
+            num3 = font3.render("Menu", True, "black")
+            screen.blit(num3, (200, 343))
 
 
-            def main():
-                game_over = False
-                screen.fill("black")
-                while not game_over:
-                    for event in py.event.get():
-                        if event.type == py.QUIT:
-                            py.quit()
-                            sys.exit(0)
-                        elif event.type == py.MOUSEBUTTONDOWN:
-                            x_mouse, y_mouse = py.mouse.get_pos()
-                            col = x_mouse // (size + board)
-                            row = y_mouse // (size + board)
-                            if sheet1[row][col] == 0:
-                                if col + 1 == 1:
-                                    c = "A"
-                                elif col + 1 == 2:
-                                    c = "B"
-                                elif col + 1 == 3:
-                                    c = "C"
-                                elif col + 1 == 4:
-                                    c = "D"
-                                elif col + 1 == 5:
-                                    c = "E"
-                                elif col + 1 == 6:
-                                    c = "F"
-                                elif col + 1 == 7:
-                                    c = "G"
-                                elif col + 1 == 8:
-                                    c = "H"
-                                elif col + 1 == 9:
-                                    c = "I"
-                                elif col + 1 == 10:
-                                    c = "J"
-                                print(c, row)
-                                sheet1[row][col] = 'x'  # green
-                    greed()
-                    py.display.update()
+        def greed():
+            let = ["J", "I", "H", "G", "F", "E", "D", "C", "B", "A"]
+            for row in range(1, 11):
+                for col in range(11, 21):
+                    x = col * size + (col + 1) * board
+                    y = row * size + (row + 1) * board
+                    py.draw.rect(screen, "white", (x, y, size, size))
+                num = font.render(str(row), True, "red")
+                letters = font.render(let[row - 1], True, "red")
+                screen.blit(num, (x - 273, y + 4))
+                screen.blit(letters, ((x + 5) - (row - 1) * 28, (y + 5) - (row) * 28))
+                screen.blit(letters, ((x - 300) - (row - 1) * 28, (y + 5) - (row) * 28))
+            for row in range(1, 11):
+                for col in range(10):
+                    x = col * size + (col + 1) * board
+                    y = row * size + (row + 1) * board
+                    py.draw.rect(screen, "white", (x, y, size, size))
+                    if sheet1[row][col] == 'x':
+                        py.draw.circle(screen, "green", (x + size // 2, y + size // 2), size // 2 - 3)
 
 
-            main()
-            py.quit()
+        def main():
+            game_over = False
+            screen.fill("black")
+            print("new game")
+            while not game_over:
+                for event in py.event.get():
+                    if event.type == py.QUIT:
+                        py.quit()
+                        sys.exit(0)
+                    elif event.type == py.MOUSEBUTTONDOWN:
+                        x_mouse, y_mouse = py.mouse.get_pos()
+                        col = x_mouse // (size + board)
+                        row = y_mouse // (size + board)
+                        if sheet1[row][col] == 0:
+                            if col + 1 == 1:
+                                c = "A"
+                            elif col + 1 == 2:
+                                c = "B"
+                            elif col + 1 == 3:
+                                c = "C"
+                            elif col + 1 == 4:
+                                c = "D"
+                            elif col + 1 == 5:
+                                c = "E"
+                            elif col + 1 == 6:
+                                c = "F"
+                            elif col + 1 == 7:
+                                c = "G"
+                            elif col + 1 == 8:
+                                c = "H"
+                            elif col + 1 == 9:
+                                c = "I"
+                            elif col + 1 == 10:
+                                c = "J"
+                            print(c, row)
+                            sheet1[row][col] = 'x'  # green
+                            if col + 1 == 10 and row == 12 or col + 1 == 9 and row == 12 or col + 1 == 8 and row == 12 or col + 1 == 10 and row == 11:
+                                game_over = True
+
+                greed()
+                button()
+                py.display.update()
+
+
+        main()
+        game_window.endCurrentScreen()
+        win = menuScreen.makeCurrentScreen()
+
     for event in py.event.get():
         if (event.type == py.QUIT):
             done = True
+
     py.display.update()
 py.quit()
