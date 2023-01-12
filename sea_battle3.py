@@ -4,12 +4,11 @@ import sys
 
 class Screen():
 
-    def __init__(self, title, width=440, height=445,
-                 fill=(0, 0, 255)):
-        self.height = height
+    def __init__(self, title):
+        self.height = 445
         self.title = title
-        self.width = width
-        self.fill = fill
+        self.width = 440
+        self.fill = (0, 0, 255)
         self.CurrentState = False
 
     def makeCurrentScreen(self):
@@ -49,7 +48,7 @@ class Button():
         self.buttonf = py.font.SysFont(font, self.fontsize)
 
     def showButton(self, display):
-        if (self.CurrentState):
+        if self.CurrentState:
             py.draw.rect(display, self.fbcolour,
                          (self.x, self.y,
                           self.sx, self.sy))
@@ -66,9 +65,8 @@ class Button():
                            (self.fontsize / 2) - 4))))
 
     def focusCheck(self, mousepos, mouseclick):
-        if (mousepos[0] >= self.x and mousepos[0] <= self.x +
-                self.sx and mousepos[1] >= self.y and mousepos[1]
-                <= self.y + self.sy):
+        if (mousepos[0] >= self.x) and (mousepos[0] <= self.x + self.sx) and (mousepos[1] >= self.y) and (mousepos[
+                                                                                                              1] <= self.y + self.sy):
             self.CurrentState = True
             return mouseclick[0]
         else:
@@ -85,7 +83,7 @@ window = Screen("Exit")
 win = menuScreen.makeCurrentScreen()
 MENU_BUTTON = Button(150, 150, 120, 50, ("black"),
                      ("black"), "TimesNewRoman",
-                     ("white"), "SStart Game")
+                     ("white"), "Start Game")
 MENU_BUTTON2 = Button(185, 55, 130, 50, ("white"),
                       ("white"), "TimesNewRoman",
                       ("black"), "Let's play sea battle")
@@ -145,9 +143,9 @@ while not done:
 
 
         def button():
-            py.draw.rect(screen, "white", (197, 336, 80, 40))
+            py.draw.rect(screen, "white", (5, 336, 80, 40))
             num3 = font3.render("Menu", True, "black")
-            screen.blit(num3, (200, 343))
+            screen.blit(num3, (7, 343))
 
 
         def greed():
@@ -185,29 +183,29 @@ while not done:
                         col = x_mouse // (size + board)
                         row = y_mouse // (size + board)
                         if sheet1[row][col] == 0:
-                            if col + 1 == 1:
+                            if col == 0:
                                 c = "A"
-                            elif col + 1 == 2:
+                            elif col == 1:
                                 c = "B"
-                            elif col + 1 == 3:
+                            elif col == 2:
                                 c = "C"
-                            elif col + 1 == 4:
+                            elif col == 3:
                                 c = "D"
-                            elif col + 1 == 5:
+                            elif col == 4:
                                 c = "E"
-                            elif col + 1 == 6:
+                            elif col == 5:
                                 c = "F"
-                            elif col + 1 == 7:
+                            elif col == 6:
                                 c = "G"
-                            elif col + 1 == 8:
+                            elif col == 7:
                                 c = "H"
-                            elif col + 1 == 9:
+                            elif col == 8:
                                 c = "I"
-                            elif col + 1 == 10:
+                            elif col == 9:
                                 c = "J"
                             print(c, row)
                             sheet1[row][col] = 'x'  # green
-                            if col + 1 == 10 and row == 12 or col + 1 == 9 and row == 12 or col + 1 == 8 and row == 12 or col + 1 == 10 and row == 11:
+                            if col == 9 and row == 12 or col == 8 and row == 12 or col == 7 and row == 12 or col == 9 and row == 11:
                                 game_over = True
 
                 greed()
