@@ -180,7 +180,7 @@ while not done:
                         sys.exit(0)
                     elif event.type == py.MOUSEBUTTONDOWN:
                         x_mouse, y_mouse = py.mouse.get_pos()
-                        col = x_mouse // (size + board)
+                        col = (x_mouse - 300) // (size + board)
                         row = y_mouse // (size + board)
                         if sheet1[row][col] == 0:
                             if col == 0:
