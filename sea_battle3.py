@@ -245,7 +245,7 @@ while not done:  # смена экранов
                                 sheet[row][col] = 'z'
                             if col == 0 and row == 12 or col == 1 and row == 12 or col == 2 and row == 12 or col == 0 and row == 11:
                                 game_over = True  # кнопка menu активируется  и выходит из окна игры
-                    if event.type == py.MOUSEBUTTONDOWN and event.button == 1:  # перемещение кораблей
+                    if event.type == py.MOUSEBUTTONDOWN and event.button == 3:  # перемещение кораблей
                         if x11 < event.pos[0] < x11 + 25 and y11 < event.pos[1] < y11 + 25:
                             moving11 = True
                         if x12 < event.pos[0] < x12 + 25 and y12 < event.pos[1] < y12 + 25:
@@ -282,7 +282,7 @@ while not done:  # смена экранов
                         if moving23:
                             x23_new, y23_new = event.rel
                             x23, y23 = x23 + x23_new, y23 + y23_new
-                    if event.type == py.MOUSEBUTTONUP and event.button == 1:  # продолжение перемещения кораблей
+                    if event.type == py.MOUSEBUTTONUP and event.button == 3:  # продолжение перемещения кораблей
                         moving11 = False
                         moving12 = False
                         moving13 = False
