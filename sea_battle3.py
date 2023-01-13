@@ -1,5 +1,6 @@
 import pygame as py
 import sys
+import os
 
 
 class Screen():
@@ -30,6 +31,23 @@ class Screen():
 
     def returnTitle(self):
         return self.screen
+
+
+def load_image(name, color_key=None):
+    fullname = os.path.join('data', name)
+    try:
+        image = py.image.load(fullname).convert()
+    except py.error as message:
+        print('Cannot load image:', name)
+        raise SystemExit(message)
+
+    if color_key is not None:
+        if color_key == -1:
+            color_key = image.get_at((0, 0))
+        image.set_colorkey(color_key)
+    else:
+        image = image.convert_alpha()
+    return image
 
 
 class Button():
@@ -143,23 +161,22 @@ while not done:
 
 
         def button():
-            py.draw.rect(screen, "white", (5, 336, 80, 40))
-            num3 = font3.render("Menu", True, "black")
-            screen.blit(num3, (7, 343))
-
+            pass  # Нужно сделать нормальную кнопку
 
         def greed():
             let = ["J", "I", "H", "G", "F", "E", "D", "C", "B", "A"]
             for row in range(1, 11):
-                for col in range(11, 21):
-                    x = col * size + (col + 1) * board
+                for col in range(10):
+                    x = col * size + (col + 1) * board + 300
                     y = row * size + (row + 1) * board
                     py.draw.rect(screen, "white", (x, y, size, size))
+                    if sheet2[row][col] == 'z':
+                        py.draw.circle(screen, "red", (x + size // 2, y + size // 2), size // 2 - 3)
                 num = font.render(str(row), True, "red")
                 letters = font.render(let[row - 1], True, "red")
                 screen.blit(num, (x - 273, y + 4))
-                screen.blit(letters, ((x + 5) - (row - 1) * 28, (y + 5) - (row) * 28))
-                screen.blit(letters, ((x - 300) - (row - 1) * 28, (y + 5) - (row) * 28))
+                screen.blit(letters, ((x + 5) - (row - 1) * 28, (y + 5) - row * 28))
+                screen.blit(letters, ((x - 300) - (row - 1) * 28, (y + 5) - row * 28))
             for row in range(1, 11):
                 for col in range(10):
                     x = col * size + (col + 1) * board
@@ -171,8 +188,9 @@ while not done:
 
         def main():
             game_over = False
-            screen.fill("black")
-            print("new game")
+            fon = py.transform.scale(load_image('fon.jpg'), (585, 445))
+            screen.blit(fon, (0, 0))
+            print("Game started.")
             while not game_over:
                 for event in py.event.get():
                     if event.type == py.QUIT:
@@ -180,9 +198,13 @@ while not done:
                         sys.exit(0)
                     elif event.type == py.MOUSEBUTTONDOWN:
                         x_mouse, y_mouse = py.mouse.get_pos()
-                        col = (x_mouse - 300) // (size + board)
+                        if x_mouse > 310:
+                            col = (x_mouse - 300) // (size + board)
+                        else:
+                            col = x_mouse // (size + board)
                         row = y_mouse // (size + board)
-                        if sheet1[row][col] == 0:
+                        if (sheet1[row][col] == 0) and ((280 > x_mouse > 5) or (310 < x_mouse < 585)) and (
+                                0 <= row <= 10) and (0 <= col <= 10):
                             if col == 0:
                                 c = "A"
                             elif col == 1:
@@ -204,9 +226,12 @@ while not done:
                             elif col == 9:
                                 c = "J"
                             print(c, row)
-                            sheet1[row][col] = 'x'  # green
-                            if col == 9 and row == 12 or col == 8 and row == 12 or col == 7 and row == 12 or col == 9 and row == 11:
-                                game_over = True
+                            if 3 < x_mouse < 280:
+                                sheet1[row][col] = 'x'  # green
+                            elif 310 < x_mouse < 585:
+                                sheet2[row][col] = 'z'  # red
+                        else:
+                            print('None')
 
                 greed()
                 button()
