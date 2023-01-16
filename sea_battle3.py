@@ -194,6 +194,7 @@ while not done:  # смена экранов
 
 
         def main():
+            gamestarted = False
             moving11, moving12, moving13, moving14 = False, False, False, False
             moving21, moving22, moving23 = False, False, False
             moving31, moving32, moving41 = False, False, False
@@ -222,13 +223,13 @@ while not done:  # смена экранов
             x41_new, y41_new = 0, 0
 
             while not game_over:
+                x_mouse, y_mouse = py.mouse.get_pos()
+                col = x_mouse // (size + board)
+                row = y_mouse // (size + board)
                 for event in py.event.get():
                     if event.type == py.QUIT:
                         game_over = True
-                    if event.type == py.MOUSEBUTTONDOWN and event.button == 1:  # рисование зеленых кружков на 1 поле
-                        x_mouse, y_mouse = py.mouse.get_pos()
-                        col = x_mouse // (size + board)
-                        row = y_mouse // (size + board)
+                    if event.type == py.MOUSEBUTTONDOWN and event.button == 1 and gamestarted:  # рисование зеленых кружков на 1 поле
                         if sheet[row][col] == 0:
                             if col < 10 and row < 11:
                                 if col == 0:
@@ -255,11 +256,15 @@ while not done:  # смена экранов
                                 sheet[row][col] = 'x'  # green
                             if col > 10 and row < 11:
                                 sheet[row][col] = 'z'
+                    if event.type == py.MOUSEBUTTONDOWN and event.button == 1:  # рисование зеленых кружков на 1 поле
+                        if sheet[row][col] == 0:
                             if col == 0 and row == 12 or col == 1 and row == 12 or col == 2 and row == 12 or col == 0 and row == 11:
-                                game_over = True  # кнопка menu активируется  и выходит из окна игры
+                                game_over = True  # кнопка menu активируется и выходит из окна игры
+                                gamestarted = False
                             if col == 19 and row == 12 or col == 20 and row == 12 or col == 21 and row == 12 or col == 20 and row == 11:
                                 print("Game started.")
-                    if event.type == py.MOUSEBUTTONDOWN and event.button == 3:  # перемещение кораблей
+                                gamestarted = True
+                    if event.type == py.MOUSEBUTTONDOWN and event.button == 3 and not gamestarted:  # перемещение кораблей
                         if x11 < event.pos[0] < x11 + 25 and y11 < event.pos[1] < y11 + 25:
                             moving11 = True
                         if x12 < event.pos[0] < x12 + 25 and y12 < event.pos[1] < y12 + 25:
