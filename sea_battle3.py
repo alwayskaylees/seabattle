@@ -3,8 +3,7 @@ import sys
 import os
 
 
-class Screen():
-
+class Screen:
     def __init__(self, title):
         self.height = 445
         self.title = title
@@ -15,8 +14,7 @@ class Screen():
     def makeCurrentScreen(self):
         py.display.set_caption(self.title)
         self.CurrentState = True
-        self.screen = py.display.set_mode((self.width,
-                                           self.height))
+        self.screen = py.display.set_mode((self.width, self.height))
 
     def endCurrentScreen(self):
         self.CurrentState = False
@@ -66,7 +64,7 @@ class Button():
         self.buttonf = py.font.SysFont(font, self.fontsize)
 
     def showButton(self, display):
-        if (self.CurrentState):
+        if self.CurrentState:
             py.draw.rect(display, self.fbcolour,
                          (self.x, self.y,
                           self.sx, self.sy))
@@ -83,8 +81,7 @@ class Button():
                            (self.fontsize / 2) - 4))))
 
     def focusCheck(self, mousepos, mouseclick):
-        if (mousepos[0] >= self.x and mousepos[0] <= self.x +
-                self.sx and mousepos[1] >= self.y and mousepos[1] <= self.y + self.sy):
+        if self.x + self.sx >= mousepos[0] >= self.x and self.y + self.sy >= mousepos[1] >= self.y:
             self.CurrentState = True
             return mouseclick[0]
         else:
@@ -98,22 +95,22 @@ py.font.init()
 menuScreen = Screen("Menu Screen")
 game_window = Screen("Control")
 window = Screen("Exit")
-win = menuScreen.makeCurrentScreen()
-MENU_BUTTON = Button(150, 150, 120, 50, ("black"),
-                     ("black"), "TimesNewRoman",
-                     ("white"), "New game")
-MENU_BUTTON2 = Button(185, 55, 130, 50, ("white"),
-                      ("white"), "TimesNewRoman",
-                      ("black"), "Let's play sea battle")
-MENU_BUTTON3 = Button(150, 220, 120, 50, ("black"),
-                      ("black"), "TimesNewRoman",
-                      ("white"), "Quit")
-QUIT_BUTTON = Button(150, 300, 120, 50, ("black"),
-                     ("black"), "TimesNewRoman",
-                     ("red"), "Quit")
-QUIT_BUTTON2 = Button(100, 55, 230, 150, ("white"),
-                      ("white"), "TimesNewRoman",
-                      ("red"), "Goodbye")
+menuScreen.makeCurrentScreen()
+MENU_BUTTON = Button(150, 150, 120, 50, "black",
+                     "black", "TimesNewRoman",
+                     "white", "New game")
+MENU_BUTTON2 = Button(185, 55, 130, 50, "white",
+                      "white", "TimesNewRoman",
+                      "black", "Let's play sea battle")
+MENU_BUTTON3 = Button(150, 220, 120, 50, "black",
+                      "black", "TimesNewRoman",
+                      "white", "Quit")
+QUIT_BUTTON = Button(150, 300, 120, 50, "black",
+                     "black", "TimesNewRoman",
+                     "red", "Quit")
+QUIT_BUTTON2 = Button(100, 55, 230, 150, "white",
+                      "white", "TimesNewRoman",
+                      "red", "Goodbye")
 
 done = False
 while not done:  # смена экранов
@@ -132,10 +129,10 @@ while not done:  # смена экранов
         MENU_BUTTON2.showButton(menuScreen.returnTitle())
         MENU_BUTTON3.showButton(menuScreen.returnTitle())
         if start_button:
-            win = game_window.makeCurrentScreen()
+            game_window.makeCurrentScreen()
             menuScreen.endCurrentScreen()
         if quit_button:
-            win = window.makeCurrentScreen()
+            window.makeCurrentScreen()
             menuScreen.endCurrentScreen()
 
     elif window.checkUpdate((255, 255, 255)):
@@ -156,7 +153,7 @@ while not done:  # смена экранов
         py.display.set_caption('sea battle')
         font = py.font.SysFont("notosans", 20)
         font3 = py.font.SysFont("notosans", 40)
-        sheet = [[0] * 21 for i in range(21)]  # два поля вместе
+        sheet = [[0] * 21 for i in range(15)]  # два поля вместе
 
 
         def button():
@@ -177,15 +174,18 @@ while not done:  # смена экранов
                 num = font.render(str(row), True, "red")  # цифры
                 letters = font.render(let[row - 1], True, "red")
                 screen.blit(num, (x - 273, y + 4))
-                screen.blit(letters, ((x + 5) - (row - 1) * 28, (y + 5) - (row) * 28))  # буквы на 1 поле
-                screen.blit(letters, ((x - 300) - (row - 1) * 28, (y + 5) - (row) * 28))  # буквы на 2 поле
+                screen.blit(letters,
+                            ((x + 5) - (row - 1) * 28, (y + 5) - row * 28))  # буквы на 1 поле
+                screen.blit(letters,
+                            ((x - 300) - (row - 1) * 28, (y + 5) - row * 28))  # буквы на 2 поле
             for row in range(1, 11):  # первое поле
                 for col in range(10):
                     x = col * size + (col + 1) * board
                     y = row * size + (row + 1) * board
                     py.draw.rect(screen, "white", (x, y, size, size))
                     if sheet[row][col] == 'x':  # рисует зеленый кружок
-                        py.draw.circle(screen, "green", (x + size // 2, y + size // 2), size // 2 - 3)
+                        py.draw.circle(screen, "green", (x + size // 2, y + size // 2),
+                                       size // 2 - 3)
 
 
         def main():
@@ -219,31 +219,13 @@ while not done:  # смена экранов
                         row = y_mouse // (size + board)
                         if sheet[row][col] == 0:
                             if col < 10 and row < 11:
-                                if col == 0:
-                                    c = "A"
-                                elif col == 1:
-                                    c = "B"
-                                elif col == 2:
-                                    c = "C"
-                                elif col == 3:
-                                    c = "D"
-                                elif col == 4:
-                                    c = "E"
-                                elif col == 5:
-                                    c = "F"
-                                elif col == 6:
-                                    c = "G"
-                                elif col == 7:
-                                    c = "H"
-                                elif col == 8:
-                                    c = "I"
-                                elif col == 9:
-                                    c = "J"
+                                letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+                                c = letters[col]
                                 print(c, row)
                                 sheet[row][col] = 'x'  # green
                             if col > 10 and row < 11:
-                                sheet[row][col] = 'z'
-                            if col == 0 and row == 12 or col == 1 and row == 12 or col == 2 and row == 12 or col == 0 and row == 11:
+                                sheet[row][col] = 'z'  # red
+                            if row in [12, 13] and col in [0, 1, 2]:
                                 game_over = True  # кнопка menu активируется  и выходит из окна игры
                     if event.type == py.MOUSEBUTTONDOWN and event.button == 3:  # перемещение кораблей
                         if x11 < event.pos[0] < x11 + 25 and y11 < event.pos[1] < y11 + 25:
@@ -307,10 +289,10 @@ while not done:  # смена экранов
 
         main()
         game_window.endCurrentScreen()
-        win = menuScreen.makeCurrentScreen()
+        menuScreen.makeCurrentScreen()
 
     for event in py.event.get():
-        if (event.type == py.QUIT):
+        if event.type == py.QUIT:
             done = True
 
     py.display.update()
