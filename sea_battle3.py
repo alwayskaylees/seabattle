@@ -198,6 +198,8 @@ while not done:  # смена экранов
             moving21, moving22, moving23 = False, False, False
             moving31, moving32, moving41 = False, False, False
             game_over = False
+            fon = py.transform.scale(load_image('fon.jpg'), (585, 445))
+            screen.blit(fon, (0, 0))
             x11, y11 = 115, 320  # корабли 1 клетка
             x11_new, y11_new = 0, 0
             x12, y12 = 115, 360
