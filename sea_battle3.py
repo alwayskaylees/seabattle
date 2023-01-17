@@ -192,7 +192,6 @@ while not done:  # смена экранов
 
 
         def main():
-            ships = []
             gamestarted = False
             moving11, moving12, moving13, moving14 = False, False, False, False
             moving21, moving22, moving23 = False, False, False
@@ -220,7 +219,7 @@ while not done:  # смена экранов
             x32_new, y32_new = 0, 0
             x41, y41 = 317, 320
             x41_new, y41_new = 0, 0
-
+            up1, up2, up3, up4, up5, up6 = False, False, False, False, False, False
             while not game_over:
                 x_mouse, y_mouse = py.mouse.get_pos()
                 col = x_mouse // (size + board)
@@ -262,92 +261,26 @@ while not done:  # смена экранов
                                 gamestarted = False
                             if col == 19 and row == 12 or col == 20 and row == 12 or col == 21 and row == 12 or col == 20 and row == 11:
                                 if (x11 > 310 and y11 > 30 and x12 > 310 and y12 > 30 and x13 > 310 and y13 > 30 and
-                                    x14 > 310 and y14 > 30 and x21 > 310 and y21 > 30 and x22 > 310 and y22 > 30
-                                    and x23 > 310 and y23 > 30 and x31 > 310 and y31 > 30 and x32 > 310 and y32 > 30
-                                    and x41 > 310 and y41 > 30):
+                                        x14 > 310 and y14 > 30 and x21 > 310 and y21 > 30 and x22 > 310 and y22 > 30
+                                        and x23 > 310 and y23 > 30 and x31 > 310 and y31 > 30 and x32 > 310 and y32 > 30
+                                        and x41 > 310 and y41 > 30):
                                     print("Game started.")
                                     gamestarted = True
-                                    ship = []
-                                    ship.append((x11 - 283)//28)
-                                    ship.append((y11 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append((x12 - 283)//28)
-                                    ship.append((y12 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append((x13 - 283)//28)
-                                    ship.append((y13 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append((x14 - 283)//28)
-                                    ship.append((y14 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append((x21 - 283)//28)
-                                    ship.append((y21 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append(((x21 - 283)//28) + 1)
-                                    ship.append((y21 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append((x22 - 283)//28)
-                                    ship.append((y22 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append(((x22 - 283)//28) + 1)
-                                    ship.append((y22 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append((x23 - 283)//28)
-                                    ship.append((y23 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append(((x23 - 283)//28) + 1)
-                                    ship.append((y23 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append((x31 - 283)//28)
-                                    ship.append((y31 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append(((x31 - 283)//28) + 1)
-                                    ship.append((y31 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append(((x31 - 283)//28) + 2)
-                                    ship.append((y31 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append((x32 - 283)//28)
-                                    ship.append((y32 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append(((x32 - 283)//28) + 1)
-                                    ship.append((y32 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append(((x32 - 283)//28) + 2)
-                                    ship.append((y32 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append((x41 - 283)//28)
-                                    ship.append((y41 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append(((x41 - 283)//28) + 1)
-                                    ship.append((y41 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append(((x41 - 283)//28) + 2)
-                                    ship.append((y41 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
-                                    ship.append(((x41 - 283)//28) + 3)
-                                    ship.append((y41 - 3)//28)
-                                    ships.append(ship)
-                                    ship = []
+                                    ships = [[(x11 - 283) // 28, (y11 - 3) // 28], [(x12 - 283) // 28, (y12 - 3) // 28],
+                                             [(x13 - 283) // 28, (y13 - 3) // 28],[(x14 - 283) // 28, (y14 - 3) // 28],
+                                             [(x21 - 283) // 28, (y21 - 3) // 28],[(x22 - 283) // 28, (y22 - 3) // 28],
+                                             [((x21 - 283) // 28) + 1, (y21 - 3) // 28],
+                                             [((x22 - 283) // 28) + 1, (y22 - 3) // 28],
+                                             [(x23 - 283) // 28, (y23 - 3) // 28],[(x31 - 283) // 28, (y31 - 3) // 28],
+                                             [((x23 - 283) // 28) + 1, (y23 - 3) // 28],
+                                             [((x31 - 283) // 28) + 1, (y31 - 3) // 28],
+                                             [((x31 - 283) // 28) + 2, (y31 - 3) // 28],
+                                             [(x32 - 283) // 28, (y32 - 3) // 28],[(x41 - 283) // 28, (y41 - 3) // 28],
+                                             [((x32 - 283) // 28) + 1, (y32 - 3) // 28],
+                                             [((x32 - 283) // 28) + 2, (y32 - 3) // 28],
+                                             [((x41 - 283) // 28) + 1, (y41 - 3) // 28],
+                                             [((x41 - 283) // 28) + 2, (y41 - 3) // 28],
+                                             [((x41 - 283) // 28) + 3, (y41 - 3) // 28]]
                                     print(ships)
                                 else:
                                     print("ships out of the field")
@@ -360,17 +293,17 @@ while not done:  # смена экранов
                             moving13 = True
                         if x14 < event.pos[0] < x14 + 25 and y14 < event.pos[1] < y14 + 25:
                             moving14 = True
-                        if x21 < event.pos[0] < x21 + 25 and y21 < event.pos[1] < y21 + 25:
+                        if x21 < event.pos[0] < x21 + 50 and y21 < event.pos[1] < y21 + 25:
                             moving21 = True
-                        if x22 < event.pos[0] < x22 + 25 and y22 < event.pos[1] < y22 + 25:
+                        if x22 < event.pos[0] < x22 + 50 and y22 < event.pos[1] < y22 + 25:
                             moving22 = True
-                        if x23 < event.pos[0] < x23 + 25 and y23 < event.pos[1] < y23 + 25:
+                        if x23 < event.pos[0] < x23 + 50 and y23 < event.pos[1] < y23 + 25:
                             moving23 = True
-                        if x31 < event.pos[0] < x31 + 25 and y31 < event.pos[1] < y31 + 25:
+                        if x31 < event.pos[0] < x31 + 81 and y31 < event.pos[1] < y31 + 25:
                             moving31 = True
-                        if x32 < event.pos[0] < x32 + 25 and y32 < event.pos[1] < y32 + 25:
+                        if x32 < event.pos[0] < x32 + 81 and y32 < event.pos[1] < y32 + 25:
                             moving32 = True
-                        if x41 < event.pos[0] < x41 + 25 and y41 < event.pos[1] < y41 + 25:
+                        if x41 < event.pos[0] < x41 + 109 and y41 < event.pos[1] < y41 + 25:
                             moving41 = True
                     if event.type == py.MOUSEMOTION:  # продолжение перемещения кораблей
                         x_mouse, y_mouse = py.mouse.get_pos()
@@ -383,64 +316,46 @@ while not done:  # смена экранов
                                 if moving11:
                                     x11_new, y11_new = event.rel
                                     x11, y11 = x11 + x11_new, y11 + y11_new
-                                    x11 = x
-                                    y11 = y
+                                    x11, y11 = x, y
                                 if moving12:
                                     x12_new, y12_new = event.rel
                                     x12, y12 = x12 + x12_new, y12 + y12_new
-                                    x12 = x
-                                    y12 = y
+                                    x12, y12 = x, y
                                 if moving13:
                                     x13_new, y13_new = event.rel
                                     x13, y13 = x13 + x13_new, y13 + y13_new
-                                    x13 = x
-                                    y13 = y
+                                    x13, y13 = x, y
                                 if moving14:
                                     x14_new, y14_new = event.rel
                                     x14, y14 = x14 + x14_new, y14 + y14_new
-                                    x14 = x
-                                    y14 = y
+                                    x14, y14 = x, y
                                 if moving21:
                                     x21_new, y21_new = event.rel
                                     x21, y21 = x21 + x21_new, y21 + y21_new
-                                    x21 = x
-                                    y21 = y
+                                    x21, y21 = x, y
                                 if moving22:
                                     x22_new, y22_new = event.rel
                                     x22, y22 = x22 + x22_new, y22 + y22_new
-                                    x22 = x
-                                    y22 = y
+                                    x22, y22 = x, y
                                 if moving23:
                                     x23_new, y23_new = event.rel
                                     x23, y23 = x23 + x23_new, y23 + y23_new
-                                    x23 = x
-                                    y23 = y
+                                    x23, y23 = x, y
                                 if moving31:
                                     x31_new, y31_new = event.rel
                                     x31, y31 = x31 + x31_new, y31 + y31_new
-                                    x31 = x
-                                    y31 = y
+                                    x31, y31 = x, y
                                 if moving32:
                                     x32_new, y32_new = event.rel
                                     x32, y32 = x32 + x32_new, y32 + y32_new
-                                    x32 = x
-                                    y32 = y
+                                    x32, y32 = x, y
                                 if moving41:
                                     x41_new, y41_new = event.rel
                                     x41, y41 = x41 + x41_new, y41 + y41_new
-                                    x41 = x
-                                    y41 = y
+                                    x41, y41 = x, y
                     if event.type == py.MOUSEBUTTONUP and event.button == 1:  # продолжение перемещения кораблей
-                        moving11 = False
-                        moving12 = False
-                        moving13 = False
-                        moving14 = False
-                        moving21 = False
-                        moving22 = False
-                        moving23 = False
-                        moving31 = False
-                        moving32 = False
-                        moving41 = False
+                        moving11, moving12, moving13, moving14, moving21 = False, False, False, False, False
+                        moving22, moving23, moving31, moving32, moving41 = False, False, False, False, False
                 py.draw.rect(screen, "red", (x11, y11, size, size))
                 py.draw.rect(screen, "red", (x12, y12, size, size))
                 py.draw.rect(screen, "red", (x13, y13, size, size))
@@ -452,13 +367,9 @@ while not done:  # смена экранов
                 py.draw.rect(screen, "red", (x32, y32, 81, size))
                 py.draw.rect(screen, "red", (x41, y41, 109, size))
                 py.display.flip()
-
                 screen.fill((0, 0, 0))
-
                 greed()
                 button()
-
-
         main()
         game_window.endCurrentScreen()
         win = menuScreen.makeCurrentScreen()
