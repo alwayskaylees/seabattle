@@ -261,90 +261,96 @@ while not done:  # смена экранов
                                 game_over = True  # кнопка menu активируется и выходит из окна игры
                                 gamestarted = False
                             if col == 19 and row == 12 or col == 20 and row == 12 or col == 21 and row == 12 or col == 20 and row == 11:
-                                print("Game started.")
-                                gamestarted = True
-                                ship = []
-                                ship.append((x11 - 283)//28)
-                                ship.append((y11 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append((x12 - 283)//28)
-                                ship.append((y12 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append((x13 - 283)//28)
-                                ship.append((y13 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append((x14 - 283)//28)
-                                ship.append((y14 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append((x21 - 283)//28)
-                                ship.append((y21 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append(((x21 - 283)//28) + 1)
-                                ship.append((y21 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append((x22 - 283)//28)
-                                ship.append((y22 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append(((x22 - 283)//28) + 1)
-                                ship.append((y22 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append((x23 - 283)//28)
-                                ship.append((y23 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append(((x23 - 283)//28) + 1)
-                                ship.append((y23 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append((x31 - 283)//28)
-                                ship.append((y31 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append(((x31 - 283)//28) + 1)
-                                ship.append((y31 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append(((x31 - 283)//28) + 2)
-                                ship.append((y31 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append((x32 - 283)//28)
-                                ship.append((y32 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append(((x32 - 283)//28) + 1)
-                                ship.append((y32 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append(((x32 - 283)//28) + 2)
-                                ship.append((y32 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append((x41 - 283)//28)
-                                ship.append((y41 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append(((x41 - 283)//28) + 1)
-                                ship.append((y41 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append(((x41 - 283)//28) + 2)
-                                ship.append((y41 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                ship.append(((x41 - 283)//28) + 3)
-                                ship.append((y41 - 3)//28)
-                                ships.append(ship)
-                                ship = []
-                                print(ships)
+                                if (x11 > 310 and y11 > 30 and x12 > 310 and y12 > 30 and x13 > 310 and y13 > 30 and
+                                    x14 > 310 and y14 > 30 and x21 > 310 and y21 > 30 and x22 > 310 and y22 > 30
+                                    and x23 > 310 and y23 > 30 and x31 > 310 and y31 > 30 and x32 > 310 and y32 > 30
+                                    and x41 > 310 and y41 > 30):
+                                    print("Game started.")
+                                    gamestarted = True
+                                    ship = []
+                                    ship.append((x11 - 283)//28)
+                                    ship.append((y11 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append((x12 - 283)//28)
+                                    ship.append((y12 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append((x13 - 283)//28)
+                                    ship.append((y13 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append((x14 - 283)//28)
+                                    ship.append((y14 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append((x21 - 283)//28)
+                                    ship.append((y21 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append(((x21 - 283)//28) + 1)
+                                    ship.append((y21 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append((x22 - 283)//28)
+                                    ship.append((y22 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append(((x22 - 283)//28) + 1)
+                                    ship.append((y22 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append((x23 - 283)//28)
+                                    ship.append((y23 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append(((x23 - 283)//28) + 1)
+                                    ship.append((y23 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append((x31 - 283)//28)
+                                    ship.append((y31 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append(((x31 - 283)//28) + 1)
+                                    ship.append((y31 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append(((x31 - 283)//28) + 2)
+                                    ship.append((y31 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append((x32 - 283)//28)
+                                    ship.append((y32 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append(((x32 - 283)//28) + 1)
+                                    ship.append((y32 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append(((x32 - 283)//28) + 2)
+                                    ship.append((y32 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append((x41 - 283)//28)
+                                    ship.append((y41 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append(((x41 - 283)//28) + 1)
+                                    ship.append((y41 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append(((x41 - 283)//28) + 2)
+                                    ship.append((y41 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    ship.append(((x41 - 283)//28) + 3)
+                                    ship.append((y41 - 3)//28)
+                                    ships.append(ship)
+                                    ship = []
+                                    print(ships)
+                                else:
+                                    print("ships out of the field")
                     if event.type == py.MOUSEBUTTONDOWN and event.button == 1 and not gamestarted:  # перемещение кораблей
                         if x11 < event.pos[0] < x11 + 25 and y11 < event.pos[1] < y11 + 25:
                             moving11 = True
