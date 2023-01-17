@@ -285,7 +285,7 @@ while not done:  # смена экранов
                                 ships.append(ship)
                                 ship = []
                                 ship.append(((x21 - 283)//28) + 1)
-                                ship.append(((y21 - 3)//28) + 1)
+                                ship.append((y21 - 3)//28)
                                 ships.append(ship)
                                 ship = []
                                 ship.append((x22 - 283)//28)
@@ -293,7 +293,7 @@ while not done:  # смена экранов
                                 ships.append(ship)
                                 ship = []
                                 ship.append(((x22 - 283)//28) + 1)
-                                ship.append(((y22 - 3)//28)+1)
+                                ship.append((y22 - 3)//28)
                                 ships.append(ship)
                                 ship = []
                                 ship.append((x23 - 283)//28)
@@ -301,7 +301,7 @@ while not done:  # смена экранов
                                 ships.append(ship)
                                 ship = []
                                 ship.append(((x23 - 283)//28) + 1)
-                                ship.append(((y23 - 3)//28)+1)
+                                ship.append((y23 - 3)//28)
                                 ships.append(ship)
                                 ship = []
                                 ship.append((x31 - 283)//28)
@@ -309,11 +309,11 @@ while not done:  # смена экранов
                                 ships.append(ship)
                                 ship = []
                                 ship.append(((x31 - 283)//28) + 1)
-                                ship.append(((y31 - 3)//28) + 1)
+                                ship.append((y31 - 3)//28)
                                 ships.append(ship)
                                 ship = []
                                 ship.append(((x31 - 283)//28) + 2)
-                                ship.append(((y31 - 3)//28) + 2)
+                                ship.append((y31 - 3)//28)
                                 ships.append(ship)
                                 ship = []
                                 ship.append((x32 - 283)//28)
@@ -321,11 +321,11 @@ while not done:  # смена экранов
                                 ships.append(ship)
                                 ship = []
                                 ship.append(((x32 - 283)//28) + 1)
-                                ship.append(((y32 - 3)//28) + 1)
+                                ship.append((y32 - 3)//28)
                                 ships.append(ship)
                                 ship = []
                                 ship.append(((x32 - 283)//28) + 2)
-                                ship.append(((y32 - 3)//28) + 2)
+                                ship.append((y32 - 3)//28)
                                 ships.append(ship)
                                 ship = []
                                 ship.append((x41 - 283)//28)
@@ -333,15 +333,15 @@ while not done:  # смена экранов
                                 ships.append(ship)
                                 ship = []
                                 ship.append(((x41 - 283)//28) + 1)
-                                ship.append(((y41 - 3)//28) + 1)
+                                ship.append((y41 - 3)//28)
                                 ships.append(ship)
                                 ship = []
                                 ship.append(((x41 - 283)//28) + 2)
-                                ship.append(((y41 - 3)//28) + 2)
+                                ship.append((y41 - 3)//28)
                                 ships.append(ship)
                                 ship = []
                                 ship.append(((x41 - 283)//28) + 3)
-                                ship.append(((y41 - 3)//28) + 3)
+                                ship.append((y41 - 3)//28)
                                 ships.append(ship)
                                 ship = []
                                 print(ships)
@@ -356,7 +356,7 @@ while not done:  # смена экранов
                             moving14 = True
                         if x21 < event.pos[0] < x21 + 25 and y21 < event.pos[1] < y21 + 25:
                             moving21 = True
-                        if x22 < event.pos[0] < x22 + 25 and y22 < event.pos[1] < y12 + 25:
+                        if x22 < event.pos[0] < x22 + 25 and y22 < event.pos[1] < y22 + 25:
                             moving22 = True
                         if x23 < event.pos[0] < x23 + 25 and y23 < event.pos[1] < y23 + 25:
                             moving23 = True
