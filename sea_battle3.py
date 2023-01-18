@@ -1,6 +1,8 @@
 import pygame as py
 import sys
 import os
+import random
+import copy
 
 
 class Screen():
@@ -91,6 +93,77 @@ class Button():
             self.CurrentState = False
             return False
 
+class AutoShips:
+
+    def __init__(self, offset):
+        self.offset = offset
+        self.available_blocks = {(x, y) for x in range(
+            1 + self.offset, 11 + self.offset) for y in range(1, 11)}
+        self.ships_set = set()
+        self.ships = self.__populate_grid()
+        self.orientation = None
+        self.direction = None
+
+    def __create_start_block(self, available_blocks):
+        self.orientation = random.randint(0, 1)
+        # -1 is left or down, 1 is right or up
+        self.direction = random.choice((-1, 1))
+        x, y = random.choice(tuple(available_blocks))
+        return x, y, self.orientation, self.direction
+
+    def __create_ship(self, number_of_blocks, available_blocks):
+        ship_coordinates = []
+        x, y, self.orientation, self.direction = self.__create_start_block(
+            available_blocks)
+        for _ in range(number_of_blocks):
+            ship_coordinates.append((x, y))
+            if not self.orientation:
+                self.direction, x = self.__get_new_block_for_ship(
+                    x, self.direction, self.orientation, ship_coordinates)
+            else:
+                self.direction, y = self.__get_new_block_for_ship(
+                    y, self.direction, self.orientation, ship_coordinates)
+        if self.__is_ship_valid(ship_coordinates):
+            return ship_coordinates
+        return self.__create_ship(number_of_blocks, available_blocks)
+
+    def __get_new_block_for_ship(self, coor, direction, orientation, ship_coordinates):
+        self.direction = direction
+        self.orientation = orientation
+        if (coor <= 1 - self.offset * (self.orientation - 1) and self.direction == -1) or (
+                coor >= 10 - self.offset * (self.orientation - 1) and self.direction == 1):
+            self.direction *= -1
+            return self.direction, ship_coordinates[0][self.orientation] + self.direction
+        else:
+            return self.direction, ship_coordinates[-1][self.orientation] + self.direction
+
+    def __is_ship_valid(self, new_ship):
+        ship = set(new_ship)
+        return ship.issubset(self.available_blocks)
+
+    def __add_new_ship_to_set(self, new_ship):
+        self.ships_set.update(new_ship)
+
+    def __update_available_blocks_for_creating_ships(self, new_ship):
+        for elem in new_ship:
+            for k in range(-1, 2):
+                for m in range(-1, 2):
+                    if self.offset < (elem[0] + k) < 11 + self.offset and 0 < (elem[1] + m) < 11:
+                        self.available_blocks.discard(
+                            (elem[0] + k, elem[1] + m))
+
+    def __populate_grid(self):
+        ships_coordinates_list = []
+        for number_of_blocks in range(4, 0, -1):
+            for _ in range(5 - number_of_blocks):
+                new_ship = self.__create_ship(
+                    number_of_blocks, self.available_blocks)
+                ships_coordinates_list.append(new_ship)
+                self.__add_new_ship_to_set(new_ship)
+                self.__update_available_blocks_for_creating_ships(new_ship)
+        print(ships_coordinates_list) # потом убрать(сделано для удобства)
+        return ships_coordinates_list
+
 
 py.init()
 py.font.init()
@@ -98,7 +171,7 @@ py.font.init()
 menuScreen = Screen("Menu Screen")
 game_window = Screen("Control")
 window = Screen("Exit")
-win = menuScreen.makeCurrentScreen()
+menuScreen.makeCurrentScreen()
 MENU_BUTTON = Button(150, 150, 120, 50, ("black"),
                      ("black"), "TimesNewRoman",
                      ("white"), "New game")
@@ -132,10 +205,10 @@ while not done:  # смена экранов
         MENU_BUTTON2.showButton(menuScreen.returnTitle())
         MENU_BUTTON3.showButton(menuScreen.returnTitle())
         if start_button:
-            win = game_window.makeCurrentScreen()
+            game_window.makeCurrentScreen()
             menuScreen.endCurrentScreen()
         if quit_button:
-            win = window.makeCurrentScreen()
+            window.makeCurrentScreen()
             menuScreen.endCurrentScreen()
 
     elif window.checkUpdate((255, 255, 255)):
@@ -157,8 +230,6 @@ while not done:  # смена экранов
         font = py.font.SysFont("notosans", 20)
         font3 = py.font.SysFont("notosans", 40)
         sheet = [[0] * 21 for i in range(21)]  # два поля вместе
-
-
         def button():
             py.draw.rect(screen, "white", (5, 336, 80, 40))
             num3 = font3.render("Menu", True, "black")
@@ -166,8 +237,6 @@ while not done:  # смена экранов
             py.draw.rect(screen, "white", (505, 336, 77, 40))
             num3 = font3.render("Start", True, "black")
             screen.blit(num3, (510, 343))
-
-
         def greed():
             let = ["J", "I", "H", "G", "F", "E", "D", "C", "B", "A"]
             for row in range(1, 11):  # второе поле
@@ -189,8 +258,6 @@ while not done:  # смена экранов
                     py.draw.rect(screen, "white", (x, y, size, size))
                     if sheet[row][col] == 'x':  # рисует зеленый кружок
                         py.draw.circle(screen, "green", (x + size // 2, y + size // 2), size // 2 - 3)
-
-
         def main():
             gamestarted = False
             moving11, moving12, moving13, moving14 = False, False, False, False
@@ -260,28 +327,33 @@ while not done:  # смена экранов
                                 game_over = True  # кнопка menu активируется и выходит из окна игры
                                 gamestarted = False
                             if col == 19 and row == 12 or col == 20 and row == 12 or col == 21 and row == 12 or col == 20 and row == 11:
-                                if (x11 > 310 and y11 > 30 and x12 > 310 and y12 > 30 and x13 > 310 and y13 > 30 and
-                                        x14 > 310 and y14 > 30 and x21 > 310 and y21 > 30 and x22 > 310 and y22 > 30
-                                        and x23 > 310 and y23 > 30 and x31 > 310 and y31 > 30 and x32 > 310 and y32 > 30
-                                        and x41 > 310 and y41 > 30):
+                                if (x11 > 310 and y11 < 284 and x12 > 310 and y12 < 284 and x13 > 310 and y13 < 284 and
+                                        x14 > 310 and y14 < 284 and x21 > 310 and y21 < 284 and x22 > 310 and y22 < 284
+                                        and x23 > 310 and y23 < 284 and x31 > 310 and y31 < 284 and x32 > 310 and y32 < 284
+                                        and x41 > 310 and y41 < 284):
                                     print("Game started.")
                                     gamestarted = True
-                                    ships = [[(x11 - 283) // 28, (y11 - 3) // 28], [(x12 - 283) // 28, (y12 - 3) // 28],
-                                             [(x13 - 283) // 28, (y13 - 3) // 28],[(x14 - 283) // 28, (y14 - 3) // 28],
-                                             [(x21 - 283) // 28, (y21 - 3) // 28],[(x22 - 283) // 28, (y22 - 3) // 28],
-                                             [((x21 - 283) // 28) + 1, (y21 - 3) // 28],
-                                             [((x22 - 283) // 28) + 1, (y22 - 3) // 28],
-                                             [(x23 - 283) // 28, (y23 - 3) // 28],[(x31 - 283) // 28, (y31 - 3) // 28],
-                                             [((x23 - 283) // 28) + 1, (y23 - 3) // 28],
-                                             [((x31 - 283) // 28) + 1, (y31 - 3) // 28],
-                                             [((x31 - 283) // 28) + 2, (y31 - 3) // 28],
-                                             [(x32 - 283) // 28, (y32 - 3) // 28],[(x41 - 283) // 28, (y41 - 3) // 28],
-                                             [((x32 - 283) // 28) + 1, (y32 - 3) // 28],
-                                             [((x32 - 283) // 28) + 2, (y32 - 3) // 28],
-                                             [((x41 - 283) // 28) + 1, (y41 - 3) // 28],
-                                             [((x41 - 283) // 28) + 2, (y41 - 3) // 28],
-                                             [((x41 - 283) // 28) + 3, (y41 - 3) // 28]]
-                                    print(ships)
+                                    computer = AutoShips(0)
+                                    computer_ships_working = copy.deepcopy(computer.ships)
+                                    ships = [[(x11 - 3) // 28, (y11 - 3) // 28], [(x12 - 3) // 28, (y12 - 3) // 28],
+                                             [(x13 - 3) // 28, (y13 - 3) // 28],
+                                             [(x14 - 3) // 28, (y14 - 3) // 28], [((x21 - 3) // 28, (y21 - 3) // 28),
+                                             (((x21 - 3) // 28) + 1, (y21 - 3) // 28)],
+                                             [((x22 - 3) // 28, (y22 - 3) // 28),
+                                              (((x22 - 3) // 28) + 1, (y22 - 3) // 28)],
+                                             [((x23 - 3) // 28, (y23 - 3) // 28),
+                                              (((x23 - 3) // 28) + 1, (y23 - 3) // 28)],
+                                             [((x31 - 3) // 28, (y31 - 3) // 28),
+                                              (((x31 - 3) // 28) + 1, (y31 - 3) // 28),
+                                              (((x31 - 3) // 28) + 2, (y31 - 3) // 28)],
+                                             [((x32 - 3) // 28, (y32 - 3) // 28),
+                                              (((x32 - 3) // 28) + 1, (y32 - 3) // 28),
+                                              (((x32 - 3) // 28) + 2, (y32 - 3) // 28)],
+                                             [((x41 - 3) // 28, (y41 - 3) // 28),
+                                              (((x41 - 3) // 28) + 1, (y41 - 3) // 28),
+                                              (((x41 - 3) // 28) + 2, (y41 - 3) // 28),
+                                              (((x41 - 3) // 28) + 3, (y41 - 3) // 28)]]
+                                    print(ships) # потом убрать(сделано для удобства)
                                 else:
                                     print("ships out of the field")
                     if event.type == py.MOUSEBUTTONDOWN and event.button == 1 and not gamestarted:  # перемещение кораблей
@@ -305,7 +377,7 @@ while not done:  # смена экранов
                             moving32 = True
                         if x41 < event.pos[0] < x41 + 109 and y41 < event.pos[1] < y41 + 25:
                             moving41 = True
-                    if event.type == py.MOUSEMOTION:  # продолжение перемещения кораблей
+                    if event.type == py.MOUSEMOTION and x_mouse < 563 and y_mouse > 31:  # продолжение перемещения кораблей
                         x_mouse, y_mouse = py.mouse.get_pos()
                         col = x_mouse // (size + board)
                         row = y_mouse // (size + board)
@@ -356,12 +428,12 @@ while not done:  # смена экранов
                     if event.type == py.MOUSEBUTTONUP and event.button == 1:  # продолжение перемещения кораблей
                         moving11, moving12, moving13, moving14, moving21 = False, False, False, False, False
                         moving22, moving23, moving31, moving32, moving41 = False, False, False, False, False
+                py.draw.rect(screen, "red", (x22, y22, 53, size))
+                py.draw.rect(screen, "red", (x21, y21, 53, size))
                 py.draw.rect(screen, "red", (x11, y11, size, size))
                 py.draw.rect(screen, "red", (x12, y12, size, size))
                 py.draw.rect(screen, "red", (x13, y13, size, size))
                 py.draw.rect(screen, "red", (x14, y14, size, size))
-                py.draw.rect(screen, "red", (x21, y21, 53, size))
-                py.draw.rect(screen, "red", (x22, y22, 53, size))
                 py.draw.rect(screen, "red", (x23, y23, 53, size))
                 py.draw.rect(screen, "red", (x31, y31, 81, size))
                 py.draw.rect(screen, "red", (x32, y32, 81, size))
@@ -372,11 +444,9 @@ while not done:  # смена экранов
                 button()
         main()
         game_window.endCurrentScreen()
-        win = menuScreen.makeCurrentScreen()
-
+        menuScreen.makeCurrentScreen()
     for event in py.event.get():
         if (event.type == py.QUIT):
             done = True
-
     py.display.update()
 py.quit()
