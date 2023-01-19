@@ -250,7 +250,7 @@ while not done:  # смена экранов
                     if sheet[row][col] == 'z':  # рисует красный кружок
                         py.draw.circle(screen, "red", (x + size // 2, y + size // 2), size // 2 - 3)
                     if sheet[row][col] == 'b':  # рисует черный кружок
-                        py.draw.circle(screen, "black", (x + size // 2, y + size // 2), size // 2 - 3)
+                        py.draw.circle(screen, "black", (x + size // 2, y + size // 2), size // 2 + 1)
                 num = font.render(str(row), True, "red")  # цифры
                 letters = font.render(let[row - 1], True, "red")
                 screen.blit(num, (x - 273, y + 4))
@@ -264,7 +264,7 @@ while not done:  # смена экранов
                     if sheet[row][col] == 'x':  # рисует синий кружок
                         py.draw.circle(screen, "blue", (x + size // 2, y + size // 2), size // 2 - 3)
                     if sheet[row][col] == 'b':  # рисует черный кружок
-                        py.draw.circle(screen, "black", (x + size // 2, y + size // 2), size // 2 - 3)
+                        py.draw.circle(screen, "black", (x + size // 2, y + size // 2), size // 2 + 1)
 
 
         def main():
@@ -388,44 +388,45 @@ while not done:  # смена экранов
                                     print('---')
                                     print('---')
                                     print('Хорошая работа, командир! Вы победили в этом сражении!')
+                                    print('Противнику оставалось потопить еще', ship_left_second, 'частей кораблей')
                                     game_over = True
                                 if ship_left_second == 0:
                                     print('---')
                                     print('---')
                                     print('О нет... командир... мы потерпели поражение')
+                                    print('Вам оставалось потопить еще', ship_left_first, 'частей кораблей противника')
                                     game_over = True
-                                if not game_over:
-                                    print('...ожидание следующих действий...')
                             if not player_turn and gamestarted:
+                                check = False
                                 fire = random.choice(cells)
                                 cells.remove(fire)
                                 fire_coordinates = fire.split('-')
                                 row = int(fire_coordinates[0])
                                 col = int(fire_coordinates[1]) + 10
-                                if int(fire_coordinates[0]) == 1:
+                                if int(fire_coordinates[1]) == 1:
                                     c = "A"
-                                elif int(fire_coordinates[0]) == 2:
+                                elif int(fire_coordinates[1]) == 2:
                                     c = "B"
-                                elif int(fire_coordinates[0]) == 3:
+                                elif int(fire_coordinates[1]) == 3:
                                     c = "C"
-                                elif int(fire_coordinates[0]) == 4:
+                                elif int(fire_coordinates[1]) == 4:
                                     c = "D"
-                                elif int(fire_coordinates[0]) == 5:
+                                elif int(fire_coordinates[1]) == 5:
                                     c = "E"
-                                elif int(fire_coordinates[0]) == 6:
+                                elif int(fire_coordinates[1]) == 6:
                                     c = "F"
-                                elif int(fire_coordinates[0]) == 7:
+                                elif int(fire_coordinates[1]) == 7:
                                     c = "G"
-                                elif int(fire_coordinates[0]) == 8:
+                                elif int(fire_coordinates[1]) == 8:
                                     c = "H"
-                                elif int(fire_coordinates[0]) == 9:
+                                elif int(fire_coordinates[1]) == 9:
                                     c = "I"
-                                elif int(fire_coordinates[0]) == 10:
+                                elif int(fire_coordinates[1]) == 10:
                                     c = "J"
-                                print('Противник совершил выстрел по координатам', c, '-', fire_coordinates[1])
+                                print('Противник совершил выстрел по координатам', c, '-', int(fire_coordinates[0]))
                                 for i in ships_our:
                                     for j in i:
-                                        if j == (row, col):
+                                        if j == (col, row):
                                             sheet[row][col] = 'b'  # black
                                             check = True
                                             print("Часть вашего корабля или весь ваш корабль были разрушены!")
@@ -438,11 +439,13 @@ while not done:  # смена экранов
                                     print('---')
                                     print('---')
                                     print('Хорошая работа, командир! Вы победили в этом сражении!')
+                                    print('Противнику оставалось потопить еще', ship_left_second, 'частей кораблей')
                                     game_over = True
                                 if ship_left_second == 0:
                                     print('---')
                                     print('---')
                                     print('О нет... командир... противник сумел разгромить наш флот')
+                                    print('Вам оставалось потопить еще', ship_left_first, 'частей кораблей противника')
                                     game_over = True
                                 if not game_over:
                                     print('...ожидание следующих действий...')
@@ -520,16 +523,16 @@ while not done:  # смена экранов
                     if event.type == py.MOUSEBUTTONUP and event.button == 1:  # продолжение перемещения кораблей
                         moving11, moving12, moving13, moving14, moving21 = False, False, False, False, False
                         moving22, moving23, moving31, moving32, moving41 = False, False, False, False, False
-                py.draw.rect(screen, "blue", (x22, y22, 53, size))
-                py.draw.rect(screen, "blue", (x21, y21, 53, size))
-                py.draw.rect(screen, "blue", (x11, y11, size, size))
-                py.draw.rect(screen, "blue", (x12, y12, size, size))
-                py.draw.rect(screen, "blue", (x13, y13, size, size))
-                py.draw.rect(screen, "blue", (x14, y14, size, size))
-                py.draw.rect(screen, "blue", (x23, y23, 53, size))
-                py.draw.rect(screen, "blue", (x31, y31, 81, size))
-                py.draw.rect(screen, "blue", (x32, y32, 81, size))
-                py.draw.rect(screen, "blue", (x41, y41, 109, size))
+                py.draw.rect(screen, "blue", (x22 + 4, y22 + 4, 53 - 8, size - 8))  # не убираю разность чисел и не пишу сразу ответ, чтобы потом не
+                py.draw.rect(screen, "blue", (x21 + 4, y21 + 4, 53 - 8, size - 8))  # запутаться и если что вернуть изначальные числа назад
+                py.draw.rect(screen, "blue", (x11 + 4, y11 + 4, size - 8, size - 8))
+                py.draw.rect(screen, "blue", (x12 + 4, y12 + 4, size - 8, size - 8))
+                py.draw.rect(screen, "blue", (x13 + 4, y13 + 4, size - 8, size - 8))
+                py.draw.rect(screen, "blue", (x14 + 4, y14 + 4, size - 8, size - 8))
+                py.draw.rect(screen, "blue", (x23 + 4, y23 + 4, 53 - 8, size - 8))
+                py.draw.rect(screen, "blue", (x31 + 4, y31 + 4, 81 - 8, size - 8))
+                py.draw.rect(screen, "blue", (x32 + 4, y32 + 4, 81 - 8, size - 8))
+                py.draw.rect(screen, "blue", (x41 + 4, y41 + 4, 109 - 8, size - 8))
                 py.display.flip()
                 screen.blit(fon, (0, 0))
                 greed()
