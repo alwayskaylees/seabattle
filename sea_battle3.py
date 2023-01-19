@@ -101,7 +101,7 @@ class AutoShips:
         self.available_blocks = {(x, y) for x in range(
             1 + self.offset, 11 + self.offset) for y in range(1, 11)}
         self.ships_set = set()
-        self.ships = self.__populate_grid()
+        self.ships = self.populate_grid()
         self.orientation = None
         self.direction = None
 
@@ -153,7 +153,7 @@ class AutoShips:
                         self.available_blocks.discard(
                             (elem[0] + k, elem[1] + m))
 
-    def __populate_grid(self):
+    def populate_grid(self):
         ships_coordinates_list = []
         for number_of_blocks in range(4, 0, -1):
             for _ in range(5 - number_of_blocks):
@@ -227,6 +227,7 @@ while not done:  # смена экранов
         py.display.set_caption('sea battle')
         font = py.font.SysFont("notosans", 20)
         font3 = py.font.SysFont("notosans", 40)
+        cells = [f"{i}-{j}" for i in range(1, 11) for j in range(1, 11)]
         sheet = [[0] * 21 for i in range(21)]  # два поля вместе
 
 
@@ -248,6 +249,8 @@ while not done:  # смена экранов
                     py.draw.rect(screen, "white", (x, y, size, size))
                     if sheet[row][col] == 'z':  # рисует красный кружок
                         py.draw.circle(screen, "red", (x + size // 2, y + size // 2), size // 2 - 3)
+                    if sheet[row][col] == 'b':  # рисует черный кружок
+                        py.draw.circle(screen, "black", (x + size // 2, y + size // 2), size // 2 - 3)
                 num = font.render(str(row), True, "red")  # цифры
                 letters = font.render(let[row - 1], True, "red")
                 screen.blit(num, (x - 273, y + 4))
@@ -260,9 +263,14 @@ while not done:  # смена экранов
                     py.draw.rect(screen, "white", (x, y, size, size))
                     if sheet[row][col] == 'x':  # рисует синий кружок
                         py.draw.circle(screen, "blue", (x + size // 2, y + size // 2), size // 2 - 3)
+                    if sheet[row][col] == 'b':  # рисует черный кружок
+                        py.draw.circle(screen, "black", (x + size // 2, y + size // 2), size // 2 - 3)
 
 
         def main():
+            global computer_ships_working
+            ship_left_first = 20
+            ship_left_second = 20
             gamestarted = False
             moving11, moving12, moving13, moving14 = False, False, False, False
             moving21, moving22, moving23 = False, False, False
@@ -291,6 +299,7 @@ while not done:  # смена экранов
             x41, y41 = 317, 320
             x41_new, y41_new = 0, 0
             up1, up2, up3, up4, up5, up6 = False, False, False, False, False, False
+            player_turn = True
             while not game_over:
                 x_mouse, y_mouse = py.mouse.get_pos()
                 col = x_mouse // (size + board)
@@ -298,9 +307,48 @@ while not done:  # смена экранов
                 for event in py.event.get():
                     if event.type == py.QUIT:
                         game_over = True
-                    if event.type == py.MOUSEBUTTONDOWN and event.button == 1 and gamestarted:  # рисование зеленых
-                        # и красных кружков на 1 и 2 поле
+                    if event.type == py.MOUSEBUTTONDOWN and event.button == 1:  #
                         if sheet[row][col] == 0:
+                            if col == 0 and row == 12 or col == 1 and row == 12 or col == 2 and row == 12 or col == 0 \
+                                    and row == 11:
+                                game_over = True  # кнопка menu активируется и выходит из окна игры
+                                gamestarted = False
+                            if col == 19 and row == 12 or col == 20 and row == 12 or col == 21 and row == 12 or \
+                                    col == 20 and row == 11:
+                                if (x11 > 310 and y11 < 284 and x12 > 310 and y12 < 284 and x13 > 310 and y13 < 284 and
+                                        x14 > 310 and y14 < 284 and x21 > 310 and y21 < 284 and x22 > 310 and y22 < 284
+                                        and x23 > 310 and y23 < 284 and x31 > 310 and y31 < 284 and x32 > 310 and
+                                        y32 < 284 and x41 > 310 and y41 < 284):
+                                    print("Game started.")
+                                    gamestarted = True
+                                    computer = AutoShips(0)
+                                    computer_ships_working = copy.deepcopy(computer.ships)
+                                    ships_our = [[(x11 - 3) // 28, (y11 - 3) // 28], [(x12 - 3) // 28, (y12 - 3) // 28],
+                                                 [(x13 - 3) // 28, (y13 - 3) // 28],
+                                                 [(x14 - 3) // 28, (y14 - 3) // 28],
+                                                 [((x21 - 3) // 28, (y21 - 3) // 28),
+                                                  (((x21 - 3) // 28) + 1,
+                                                   (y21 - 3) // 28)],
+                                                 [((x22 - 3) // 28, (y22 - 3) // 28),
+                                                  (((x22 - 3) // 28) + 1, (y22 - 3) // 28)],
+                                                 [((x23 - 3) // 28, (y23 - 3) // 28),
+                                                  (((x23 - 3) // 28) + 1, (y23 - 3) // 28)],
+                                                 [((x31 - 3) // 28, (y31 - 3) // 28),
+                                                  (((x31 - 3) // 28) + 1, (y31 - 3) // 28),
+                                                  (((x31 - 3) // 28) + 2, (y31 - 3) // 28)],
+                                                 [((x32 - 3) // 28, (y32 - 3) // 28),
+                                                  (((x32 - 3) // 28) + 1, (y32 - 3) // 28),
+                                                  (((x32 - 3) // 28) + 2, (y32 - 3) // 28)],
+                                                 [((x41 - 3) // 28, (y41 - 3) // 28),
+                                                  (((x41 - 3) // 28) + 1, (y41 - 3) // 28),
+                                                  (((x41 - 3) // 28) + 2, (y41 - 3) // 28),
+                                                  (((x41 - 3) // 28) + 3, (y41 - 3) // 28)]]
+                                    print(ships_our)  # потом убрать(сделано для удобства)
+                                else:
+                                    print("ships out of the field")
+                    if event.type == py.MOUSEBUTTONDOWN and event.button == 1 and gamestarted:  # рисование синих
+                        # и красных кружков на 1 и 2 поле
+                        if sheet[row][col] == 0 and player_turn:
                             if col < 10 and row < 11:
                                 if col == 0:
                                     c = "A"
@@ -323,47 +371,37 @@ while not done:  # смена экранов
                                 elif col == 9:
                                     c = "J"
                                 print(c, row)
-                                sheet[row][col] = 'x'  # blue
-                            # if col > 10 and row < 11:
-                            #     sheet[row][col] = 'z'  # red
-                    if event.type == py.MOUSEBUTTONDOWN and event.button == 1:  # рисование синих кружков на 1 поле
-                        if sheet[row][col] == 0:
-                            if col == 0 and row == 12 or col == 1 and row == 12 or col == 2 and row == 12 or col == 0 \
-                                    and row == 11:
-                                game_over = True  # кнопка menu активируется и выходит из окна игры
-                                gamestarted = False
-                            if col == 19 and row == 12 or col == 20 and row == 12 or col == 21 and row == 12 or \
-                                    col == 20 and row == 11:
-                                if (x11 > 310 and y11 < 284 and x12 > 310 and y12 < 284 and x13 > 310 and y13 < 284 and
-                                        x14 > 310 and y14 < 284 and x21 > 310 and y21 < 284 and x22 > 310 and y22 < 284
-                                        and x23 > 310 and y23 < 284 and x31 > 310 and y31 < 284 and x32 > 310 and
-                                        y32 < 284 and x41 > 310 and y41 < 284):
-                                    print("Game started.")
-                                    gamestarted = True
-                                    computer = AutoShips(0)
-                                    computer_ships_working = copy.deepcopy(computer.ships)
-                                    ships = [[(x11 - 3) // 28, (y11 - 3) // 28], [(x12 - 3) // 28, (y12 - 3) // 28],
-                                             [(x13 - 3) // 28, (y13 - 3) // 28],
-                                             [(x14 - 3) // 28, (y14 - 3) // 28], [((x21 - 3) // 28, (y21 - 3) // 28),
-                                                                                  (((x21 - 3) // 28) + 1,
-                                                                                   (y21 - 3) // 28)],
-                                             [((x22 - 3) // 28, (y22 - 3) // 28),
-                                              (((x22 - 3) // 28) + 1, (y22 - 3) // 28)],
-                                             [((x23 - 3) // 28, (y23 - 3) // 28),
-                                              (((x23 - 3) // 28) + 1, (y23 - 3) // 28)],
-                                             [((x31 - 3) // 28, (y31 - 3) // 28),
-                                              (((x31 - 3) // 28) + 1, (y31 - 3) // 28),
-                                              (((x31 - 3) // 28) + 2, (y31 - 3) // 28)],
-                                             [((x32 - 3) // 28, (y32 - 3) // 28),
-                                              (((x32 - 3) // 28) + 1, (y32 - 3) // 28),
-                                              (((x32 - 3) // 28) + 2, (y32 - 3) // 28)],
-                                             [((x41 - 3) // 28, (y41 - 3) // 28),
-                                              (((x41 - 3) // 28) + 1, (y41 - 3) // 28),
-                                              (((x41 - 3) // 28) + 2, (y41 - 3) // 28),
-                                              (((x41 - 3) // 28) + 3, (y41 - 3) // 28)]]
-                                    print(ships)  # потом убрать(сделано для удобства)
-                                else:
-                                    print("ships out of the field")
+                                check = False
+                                ships = computer_ships_working
+                                for i in ships:
+                                    for j in i:
+                                        if j == (row, col + 1):
+                                            sheet[row][col] = 'b'  # black
+                                            check = True
+                                            ship_left_first -= 1
+                                            print("Часть корабля или весь корабль противника были разрушены!")
+                                if not check:
+                                    sheet[row][col] = 'x'  # blue
+                                player_turn = False
+                                print("Вы не попали по вражеским кораблям!")
+                            if not player_turn and gamestarted:
+                                fire = random.choice(cells)
+                                cells.remove(fire)
+                                print(fire)
+                                fire_coordinates = fire.split('-')
+                                row = int(fire_coordinates[0])
+                                col = int(fire_coordinates[1]) + 10
+                                for i in ships_our:
+                                    for j in i:
+                                        if j == (row, col):
+                                            sheet[row][col] = 'b'  # black
+                                            check = True
+                                            print("Часть вашего корабля или весь ваш корабль были разрушены!")
+                                            ship_left_second -= 1
+                                if not check:
+                                    sheet[row][col] = 'z'  # blue
+                                    print("Все ваши корабли остались в том же состоянии, что и до выстрела противника!")
+                                player_turn = True
                     if event.type == py.MOUSEBUTTONDOWN and event.button == 1 and not gamestarted:  # перемещение
                         # кораблей
                         if x11 < event.pos[0] < x11 + 25 and y11 < event.pos[1] < y11 + 25:
