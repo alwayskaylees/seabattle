@@ -5,33 +5,34 @@ import random
 import copy
 
 
-class Screen():
+class Screen:
 
     def __init__(self, title):
+        self.screen = None
         self.height = 445
         self.title = title
         self.width = 440
         self.fill = (0, 0, 255)
         self.CurrentState = False
 
-    def makeCurrentScreen(self):
+    def make_current_screen(self):
         py.display.set_caption(self.title)
         self.CurrentState = True
         self.screen = py.display.set_mode((self.width,
                                            self.height))
 
-    def endCurrentScreen(self):
+    def end_current_screen(self):
         self.CurrentState = False
 
-    def checkUpdate(self, fill):
+    def check_update(self, fill):
         self.fill = fill
         return self.CurrentState
 
-    def screenUpdate(self):
+    def screen_update(self):
         if self.CurrentState:
             self.screen.fill(self.fill)
 
-    def returnTitle(self):
+    def return_title(self):
         return self.screen
 
 
@@ -52,9 +53,9 @@ def load_image(name, color_key=None):
     return image
 
 
-class Button():
+class Button:
     def __init__(self, x, y, sx, sy, bcolour,
-                 fbcolour, font, fcolour, text):
+                 fbcolour, tfont, fcolour, text):
         self.x = x
         self.y = y
         self.sx = sx
@@ -65,10 +66,10 @@ class Button():
         self.fcolour = fcolour
         self.text = text
         self.CurrentState = False
-        self.buttonf = py.font.SysFont(font, self.fontsize)
+        self.buttonf = py.font.SysFont(tfont, self.fontsize)
 
-    def showButton(self, display):
-        if (self.CurrentState):
+    def show_button(self, display):
+        if self.CurrentState:
             py.draw.rect(display, self.fbcolour,
                          (self.x, self.y,
                           self.sx, self.sy))
@@ -84,14 +85,14 @@ class Button():
                        5, (self.y + (self.sy / 2) -
                            (self.fontsize / 2) - 4))))
 
-    def focusCheck(self, mousepos, mouseclick):
-        if (mousepos[0] >= self.x and mousepos[0] <= self.x +
-                self.sx and mousepos[1] >= self.y and mousepos[1] <= self.y + self.sy):
+    def focus_check(self, mousepos, mouseclick):
+        if self.x <= mousepos[0] <= self.x + self.sx and self.y <= mousepos[1] <= self.y + self.sy:
             self.CurrentState = True
             return mouseclick[0]
         else:
             self.CurrentState = False
             return False
+
 
 class AutoShips:
 
@@ -161,7 +162,7 @@ class AutoShips:
                 ships_coordinates_list.append(new_ship)
                 self.__add_new_ship_to_set(new_ship)
                 self.__update_available_blocks_for_creating_ships(new_ship)
-        print(ships_coordinates_list) # потом убрать(сделано для удобства)
+        print(ships_coordinates_list)  # потом убрать(сделано для удобства)
         return ships_coordinates_list
 
 
@@ -171,55 +172,52 @@ py.font.init()
 menuScreen = Screen("Menu Screen")
 game_window = Screen("Control")
 window = Screen("Exit")
-menuScreen.makeCurrentScreen()
-MENU_BUTTON = Button(150, 150, 120, 50, ("black"),
-                     ("black"), "TimesNewRoman",
-                     ("white"), "New game")
-MENU_BUTTON2 = Button(185, 55, 130, 50, ("white"),
-                      ("white"), "TimesNewRoman",
-                      ("black"), "Let's play sea battle")
-MENU_BUTTON3 = Button(150, 220, 120, 50, ("black"),
-                      ("black"), "TimesNewRoman",
-                      ("white"), "Quit")
-QUIT_BUTTON = Button(150, 300, 120, 50, ("black"),
-                     ("black"), "TimesNewRoman",
-                     ("red"), "Quit")
-QUIT_BUTTON2 = Button(100, 55, 230, 150, ("white"),
-                      ("white"), "TimesNewRoman",
-                      ("red"), "Goodbye")
+menuScreen.make_current_screen()
+MENU_BUTTON = Button(150, 150, 120, 50, "black",
+                     "black", "TimesNewRoman",
+                     "white", "New game")
+MENU_BUTTON2 = Button(185, 55, 130, 50, "white",
+                      "white", "TimesNewRoman",
+                      "black", "Let's play sea battle")
+MENU_BUTTON3 = Button(150, 220, 120, 50, "black",
+                      "black", "TimesNewRoman",
+                      "white", "Quit")
+QUIT_BUTTON = Button(150, 300, 120, 50, "black",
+                     "black", "TimesNewRoman",
+                     "red", "Quit")
+QUIT_BUTTON2 = Button(100, 55, 230, 150, "white",
+                      "white", "TimesNewRoman",
+                      "red", "Goodbye")
 
 done = False
 while not done:  # смена экранов
-    menuScreen.screenUpdate()
-    game_window.screenUpdate()
-    window.screenUpdate()
+    menuScreen.screen_update()
+    game_window.screen_update()
+    window.screen_update()
     mouse_pos = py.mouse.get_pos()
     mouse_click = py.mouse.get_pressed()
     keys = py.key.get_pressed()
-    if menuScreen.checkUpdate((255, 255, 255)):
-        start_button = MENU_BUTTON.focusCheck(mouse_pos,
-                                              mouse_click)
-        quit_button = MENU_BUTTON3.focusCheck(mouse_pos,
-                                              mouse_click)
-        MENU_BUTTON.showButton(menuScreen.returnTitle())
-        MENU_BUTTON2.showButton(menuScreen.returnTitle())
-        MENU_BUTTON3.showButton(menuScreen.returnTitle())
+    if menuScreen.check_update((255, 255, 255)):
+        start_button = MENU_BUTTON.focus_check(mouse_pos, mouse_click)
+        quit_button = MENU_BUTTON3.focus_check(mouse_pos, mouse_click)
+        MENU_BUTTON.show_button(menuScreen.return_title())
+        MENU_BUTTON2.show_button(menuScreen.return_title())
+        MENU_BUTTON3.show_button(menuScreen.return_title())
         if start_button:
-            game_window.makeCurrentScreen()
-            menuScreen.endCurrentScreen()
+            game_window.make_current_screen()
+            menuScreen.end_current_screen()
         if quit_button:
-            window.makeCurrentScreen()
-            menuScreen.endCurrentScreen()
+            window.make_current_screen()
+            menuScreen.end_current_screen()
 
-    elif window.checkUpdate((255, 255, 255)):
-        exit_button = QUIT_BUTTON.focusCheck(mouse_pos,
-                                             mouse_click)
-        QUIT_BUTTON.showButton(window.returnTitle())
-        QUIT_BUTTON2.showButton(window.returnTitle())
+    elif window.check_update((255, 255, 255)):
+        exit_button = QUIT_BUTTON.focus_check(mouse_pos, mouse_click)
+        QUIT_BUTTON.show_button(window.return_title())
+        QUIT_BUTTON2.show_button(window.return_title())
         if exit_button:
             sys.exit()
 
-    elif game_window.checkUpdate((255, 255, 255)):
+    elif game_window.check_update((255, 255, 255)):
         size = 25
         board = 3
         width = size * 21 + board * 20
@@ -230,6 +228,8 @@ while not done:  # смена экранов
         font = py.font.SysFont("notosans", 20)
         font3 = py.font.SysFont("notosans", 40)
         sheet = [[0] * 21 for i in range(21)]  # два поля вместе
+
+
         def button():
             py.draw.rect(screen, "white", (5, 336, 80, 40))
             num3 = font3.render("Menu", True, "black")
@@ -237,6 +237,8 @@ while not done:  # смена экранов
             py.draw.rect(screen, "white", (505, 336, 77, 40))
             num3 = font3.render("Start", True, "black")
             screen.blit(num3, (510, 343))
+
+
         def greed():
             let = ["J", "I", "H", "G", "F", "E", "D", "C", "B", "A"]
             for row in range(1, 11):  # второе поле
@@ -249,8 +251,8 @@ while not done:  # смена экранов
                 num = font.render(str(row), True, "red")  # цифры
                 letters = font.render(let[row - 1], True, "red")
                 screen.blit(num, (x - 273, y + 4))
-                screen.blit(letters, ((x + 5) - (row - 1) * 28, (y + 5) - (row) * 28))  # буквы на 1 поле
-                screen.blit(letters, ((x - 300) - (row - 1) * 28, (y + 5) - (row) * 28))  # буквы на 2 поле
+                screen.blit(letters, ((x + 5) - (row - 1) * 28, (y + 5) - row * 28))  # буквы на 1 поле
+                screen.blit(letters, ((x - 300) - (row - 1) * 28, (y + 5) - row * 28))  # буквы на 2 поле
             for row in range(1, 11):  # первое поле
                 for col in range(10):
                     x = col * size + (col + 1) * board
@@ -258,6 +260,8 @@ while not done:  # смена экранов
                     py.draw.rect(screen, "white", (x, y, size, size))
                     if sheet[row][col] == 'x':  # рисует зеленый кружок
                         py.draw.circle(screen, "green", (x + size // 2, y + size // 2), size // 2 - 3)
+
+
         def main():
             gamestarted = False
             moving11, moving12, moving13, moving14 = False, False, False, False
@@ -294,7 +298,8 @@ while not done:  # смена экранов
                 for event in py.event.get():
                     if event.type == py.QUIT:
                         game_over = True
-                    if event.type == py.MOUSEBUTTONDOWN and event.button == 1 and gamestarted:  # рисование зеленых кружков на 1 поле
+                    if event.type == py.MOUSEBUTTONDOWN and event.button == 1 and gamestarted:  # рисование зеленых
+                        # кружков на 1 поле
                         if sheet[row][col] == 0:
                             if col < 10 and row < 11:
                                 if col == 0:
@@ -323,14 +328,16 @@ while not done:  # смена экранов
                                 sheet[row][col] = 'z'
                     if event.type == py.MOUSEBUTTONDOWN and event.button == 1:  # рисование зеленых кружков на 1 поле
                         if sheet[row][col] == 0:
-                            if col == 0 and row == 12 or col == 1 and row == 12 or col == 2 and row == 12 or col == 0 and row == 11:
+                            if col == 0 and row == 12 or col == 1 and row == 12 or col == 2 and row == 12 or col == 0 \
+                                    and row == 11:
                                 game_over = True  # кнопка menu активируется и выходит из окна игры
                                 gamestarted = False
-                            if col == 19 and row == 12 or col == 20 and row == 12 or col == 21 and row == 12 or col == 20 and row == 11:
+                            if col == 19 and row == 12 or col == 20 and row == 12 or col == 21 and row == 12 or \
+                                    col == 20 and row == 11:
                                 if (x11 > 310 and y11 < 284 and x12 > 310 and y12 < 284 and x13 > 310 and y13 < 284 and
                                         x14 > 310 and y14 < 284 and x21 > 310 and y21 < 284 and x22 > 310 and y22 < 284
-                                        and x23 > 310 and y23 < 284 and x31 > 310 and y31 < 284 and x32 > 310 and y32 < 284
-                                        and x41 > 310 and y41 < 284):
+                                        and x23 > 310 and y23 < 284 and x31 > 310 and y31 < 284 and x32 > 310 and
+                                        y32 < 284 and x41 > 310 and y41 < 284):
                                     print("Game started.")
                                     gamestarted = True
                                     computer = AutoShips(0)
@@ -338,7 +345,8 @@ while not done:  # смена экранов
                                     ships = [[(x11 - 3) // 28, (y11 - 3) // 28], [(x12 - 3) // 28, (y12 - 3) // 28],
                                              [(x13 - 3) // 28, (y13 - 3) // 28],
                                              [(x14 - 3) // 28, (y14 - 3) // 28], [((x21 - 3) // 28, (y21 - 3) // 28),
-                                             (((x21 - 3) // 28) + 1, (y21 - 3) // 28)],
+                                                                                  (((x21 - 3) // 28) + 1,
+                                                                                   (y21 - 3) // 28)],
                                              [((x22 - 3) // 28, (y22 - 3) // 28),
                                               (((x22 - 3) // 28) + 1, (y22 - 3) // 28)],
                                              [((x23 - 3) // 28, (y23 - 3) // 28),
@@ -353,10 +361,11 @@ while not done:  # смена экранов
                                               (((x41 - 3) // 28) + 1, (y41 - 3) // 28),
                                               (((x41 - 3) // 28) + 2, (y41 - 3) // 28),
                                               (((x41 - 3) // 28) + 3, (y41 - 3) // 28)]]
-                                    print(ships) # потом убрать(сделано для удобства)
+                                    print(ships)  # потом убрать(сделано для удобства)
                                 else:
                                     print("ships out of the field")
-                    if event.type == py.MOUSEBUTTONDOWN and event.button == 1 and not gamestarted:  # перемещение кораблей
+                    if event.type == py.MOUSEBUTTONDOWN and event.button == 1 and not gamestarted:  # перемещение
+                        # кораблей
                         if x11 < event.pos[0] < x11 + 25 and y11 < event.pos[1] < y11 + 25:
                             moving11 = True
                         if x12 < event.pos[0] < x12 + 25 and y12 < event.pos[1] < y12 + 25:
@@ -377,7 +386,8 @@ while not done:  # смена экранов
                             moving32 = True
                         if x41 < event.pos[0] < x41 + 109 and y41 < event.pos[1] < y41 + 25:
                             moving41 = True
-                    if event.type == py.MOUSEMOTION and x_mouse < 563 and y_mouse > 31:  # продолжение перемещения кораблей
+                    if event.type == py.MOUSEMOTION and x_mouse < 563 and y_mouse > 31:  # продолжение перемещения
+                        # кораблей
                         x_mouse, y_mouse = py.mouse.get_pos()
                         col = x_mouse // (size + board)
                         row = y_mouse // (size + board)
@@ -439,14 +449,16 @@ while not done:  # смена экранов
                 py.draw.rect(screen, "red", (x32, y32, 81, size))
                 py.draw.rect(screen, "red", (x41, y41, 109, size))
                 py.display.flip()
-                screen.fill((0, 0, 0))
+                screen.blit(fon, (0, 0))
                 greed()
                 button()
+
+
         main()
-        game_window.endCurrentScreen()
-        menuScreen.makeCurrentScreen()
+        game_window.end_current_screen()
+        menuScreen.make_current_screen()
     for event in py.event.get():
-        if (event.type == py.QUIT):
+        if event.type == py.QUIT:
             done = True
     py.display.update()
 py.quit()
