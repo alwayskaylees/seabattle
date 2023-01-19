@@ -162,7 +162,7 @@ class AutoShips:
                 ships_coordinates_list.append(new_ship)
                 self.__add_new_ship_to_set(new_ship)
                 self.__update_available_blocks_for_creating_ships(new_ship)
-        print(ships_coordinates_list)  # потом убрать(сделано для удобства)
+        print('Для разработчиков! Координаты кораблей бота -', ships_coordinates_list)  # потом убрать(сделано для удобства)
         return ships_coordinates_list
 
 
@@ -224,7 +224,7 @@ while not done:  # смена экранов
         height = size * 15 + board * 10
         py.init()
         screen = py.display.set_mode((width, height))
-        py.display.set_caption('sea battle')
+        py.display.set_caption('Sea Battle')
         font = py.font.SysFont("notosans", 20)
         font3 = py.font.SysFont("notosans", 40)
         cells = [f"{i}-{j}" for i in range(1, 11) for j in range(1, 11)]
@@ -343,9 +343,9 @@ while not done:  # смена экранов
                                                   (((x41 - 3) // 28) + 1, (y41 - 3) // 28),
                                                   (((x41 - 3) // 28) + 2, (y41 - 3) // 28),
                                                   (((x41 - 3) // 28) + 3, (y41 - 3) // 28)]]
-                                    print(ships_our)  # потом убрать(сделано для удобства)
+                                    print('Для разработчиков! Координаты кораблей игрока -', ships_our)  # потом убрать(сделано для удобства)
                                 else:
-                                    print("ships out of the field")
+                                    print("Корабли вне поля!")
                     if event.type == py.MOUSEBUTTONDOWN and event.button == 1 and gamestarted:  # рисование синих
                         # и красных кружков на 1 и 2 поле
                         if sheet[row][col] == 0 and player_turn:
@@ -370,7 +370,7 @@ while not done:  # смена экранов
                                     c = "I"
                                 elif col == 9:
                                     c = "J"
-                                print(c, row)
+                                print('Вы совершили выстрел по координатам', c, '-', row)
                                 check = False
                                 ships = computer_ships_working
                                 for i in ships:
@@ -382,15 +382,47 @@ while not done:  # смена экранов
                                             print("Часть корабля или весь корабль противника были разрушены!")
                                 if not check:
                                     sheet[row][col] = 'x'  # blue
+                                    print("Вы не попали по вражеским кораблям!")
                                 player_turn = False
-                                print("Вы не попали по вражеским кораблям!")
+                                if ship_left_first == 0:
+                                    print('---')
+                                    print('---')
+                                    print('Хорошая работа, командир! Вы победили в этом сражении!')
+                                    game_over = True
+                                if ship_left_second == 0:
+                                    print('---')
+                                    print('---')
+                                    print('О нет... командир... мы потерпели поражение')
+                                    game_over = True
+                                if not game_over:
+                                    print('...ожидание следующих действий...')
                             if not player_turn and gamestarted:
                                 fire = random.choice(cells)
                                 cells.remove(fire)
-                                print(fire)
                                 fire_coordinates = fire.split('-')
                                 row = int(fire_coordinates[0])
                                 col = int(fire_coordinates[1]) + 10
+                                if int(fire_coordinates[0]) == 1:
+                                    c = "A"
+                                elif int(fire_coordinates[0]) == 2:
+                                    c = "B"
+                                elif int(fire_coordinates[0]) == 3:
+                                    c = "C"
+                                elif int(fire_coordinates[0]) == 4:
+                                    c = "D"
+                                elif int(fire_coordinates[0]) == 5:
+                                    c = "E"
+                                elif int(fire_coordinates[0]) == 6:
+                                    c = "F"
+                                elif int(fire_coordinates[0]) == 7:
+                                    c = "G"
+                                elif int(fire_coordinates[0]) == 8:
+                                    c = "H"
+                                elif int(fire_coordinates[0]) == 9:
+                                    c = "I"
+                                elif int(fire_coordinates[0]) == 10:
+                                    c = "J"
+                                print('Противник совершил выстрел по координатам', c, '-', fire_coordinates[1])
                                 for i in ships_our:
                                     for j in i:
                                         if j == (row, col):
@@ -402,6 +434,18 @@ while not done:  # смена экранов
                                     sheet[row][col] = 'z'  # blue
                                     print("Все ваши корабли остались в том же состоянии, что и до выстрела противника!")
                                 player_turn = True
+                                if ship_left_first == 0:
+                                    print('---')
+                                    print('---')
+                                    print('Хорошая работа, командир! Вы победили в этом сражении!')
+                                    game_over = True
+                                if ship_left_second == 0:
+                                    print('---')
+                                    print('---')
+                                    print('О нет... командир... противник сумел разгромить наш флот')
+                                    game_over = True
+                                if not game_over:
+                                    print('...ожидание следующих действий...')
                     if event.type == py.MOUSEBUTTONDOWN and event.button == 1 and not gamestarted:  # перемещение
                         # кораблей
                         if x11 < event.pos[0] < x11 + 25 and y11 < event.pos[1] < y11 + 25:
