@@ -258,8 +258,8 @@ while not done:  # смена экранов
                     x = col * size + (col + 1) * board
                     y = row * size + (row + 1) * board
                     py.draw.rect(screen, "white", (x, y, size, size))
-                    if sheet[row][col] == 'x':  # рисует зеленый кружок
-                        py.draw.circle(screen, "green", (x + size // 2, y + size // 2), size // 2 - 3)
+                    if sheet[row][col] == 'x':  # рисует синий кружок
+                        py.draw.circle(screen, "blue", (x + size // 2, y + size // 2), size // 2 - 3)
 
 
         def main():
@@ -299,7 +299,7 @@ while not done:  # смена экранов
                     if event.type == py.QUIT:
                         game_over = True
                     if event.type == py.MOUSEBUTTONDOWN and event.button == 1 and gamestarted:  # рисование зеленых
-                        # кружков на 1 поле
+                        # и красных кружков на 1 и 2 поле
                         if sheet[row][col] == 0:
                             if col < 10 and row < 11:
                                 if col == 0:
@@ -323,10 +323,10 @@ while not done:  # смена экранов
                                 elif col == 9:
                                     c = "J"
                                 print(c, row)
-                                sheet[row][col] = 'x'  # green
-                            if col > 10 and row < 11:
-                                sheet[row][col] = 'z'
-                    if event.type == py.MOUSEBUTTONDOWN and event.button == 1:  # рисование зеленых кружков на 1 поле
+                                sheet[row][col] = 'x'  # blue
+                            # if col > 10 and row < 11:
+                            #     sheet[row][col] = 'z'  # red
+                    if event.type == py.MOUSEBUTTONDOWN and event.button == 1:  # рисование синих кружков на 1 поле
                         if sheet[row][col] == 0:
                             if col == 0 and row == 12 or col == 1 and row == 12 or col == 2 and row == 12 or col == 0 \
                                     and row == 11:
@@ -438,16 +438,16 @@ while not done:  # смена экранов
                     if event.type == py.MOUSEBUTTONUP and event.button == 1:  # продолжение перемещения кораблей
                         moving11, moving12, moving13, moving14, moving21 = False, False, False, False, False
                         moving22, moving23, moving31, moving32, moving41 = False, False, False, False, False
-                py.draw.rect(screen, "red", (x22, y22, 53, size))
-                py.draw.rect(screen, "red", (x21, y21, 53, size))
-                py.draw.rect(screen, "red", (x11, y11, size, size))
-                py.draw.rect(screen, "red", (x12, y12, size, size))
-                py.draw.rect(screen, "red", (x13, y13, size, size))
-                py.draw.rect(screen, "red", (x14, y14, size, size))
-                py.draw.rect(screen, "red", (x23, y23, 53, size))
-                py.draw.rect(screen, "red", (x31, y31, 81, size))
-                py.draw.rect(screen, "red", (x32, y32, 81, size))
-                py.draw.rect(screen, "red", (x41, y41, 109, size))
+                py.draw.rect(screen, "blue", (x22, y22, 53, size))
+                py.draw.rect(screen, "blue", (x21, y21, 53, size))
+                py.draw.rect(screen, "blue", (x11, y11, size, size))
+                py.draw.rect(screen, "blue", (x12, y12, size, size))
+                py.draw.rect(screen, "blue", (x13, y13, size, size))
+                py.draw.rect(screen, "blue", (x14, y14, size, size))
+                py.draw.rect(screen, "blue", (x23, y23, 53, size))
+                py.draw.rect(screen, "blue", (x31, y31, 81, size))
+                py.draw.rect(screen, "blue", (x32, y32, 81, size))
+                py.draw.rect(screen, "blue", (x41, y41, 109, size))
                 py.display.flip()
                 screen.blit(fon, (0, 0))
                 greed()
