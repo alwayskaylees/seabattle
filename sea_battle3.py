@@ -343,6 +343,12 @@ while not done:  # смена экранов
                                                   (((x41 - 3) // 28) + 1, (y41 - 3) // 28),
                                                   (((x41 - 3) // 28) + 2, (y41 - 3) // 28),
                                                   (((x41 - 3) // 28) + 3, (y41 - 3) // 28)]]
+                                    single_ships = ships_our[:4]
+                                    ships_other = ships_our[4:]
+                                    ships_our = []
+                                    ships_our = ships_other
+                                    ships_our.insert(0, single_ships)
+                                    #ships_our.insert(0, single_ships)
                                     print('Для разработчиков! Координаты кораблей игрока -', ships_our)  # потом убрать(сделано для удобства)
                                 else:
                                     print("Корабли вне поля!")
@@ -426,7 +432,7 @@ while not done:  # смена экранов
                                 print('Противник совершил выстрел по координатам', c, '-', int(fire_coordinates[0]))
                                 for i in ships_our:
                                     for j in i:
-                                        if j == (col, row):
+                                        if j == (col, row) or (j[0], j[1]) == (col, row):
                                             sheet[row][col] = 'b'  # black
                                             check = True
                                             print("Часть вашего корабля или весь ваш корабль были разрушены!")
