@@ -3,6 +3,7 @@ import sys
 import os
 import random
 import copy
+import time
 
 
 class Screen:
@@ -377,6 +378,14 @@ while not done:  # смена экранов
                                 elif col == 9:
                                     c = "J"
                                 print('Вы совершили выстрел по координатам', c, '-', row)
+                                print('Ожидание результата выстрела')
+                                s = ''
+                                for i in range(21):
+                                    time.sleep(0.025)
+                                    print('\r', 'Загрузка', i * s, str(i * 5), '%', end='')
+                                print('|')
+                                print('|')
+                                print('|')
                                 check = False
                                 ships = computer_ships_working
                                 for i in ships:
@@ -391,16 +400,20 @@ while not done:  # смена экранов
                                     print("Вы не попали по вражеским кораблям!")
                                 player_turn = False
                                 if ship_left_first == 0:
-                                    print('---')
-                                    print('---')
+                                    print('|')
+                                    print('|')
+                                    print('|')
                                     print('Хорошая работа, командир! Вы победили в этом сражении!')
                                     print('Противнику оставалось потопить еще', ship_left_second, 'частей кораблей')
+                                    time.sleep(4)
                                     game_over = True
                                 if ship_left_second == 0:
-                                    print('---')
-                                    print('---')
+                                    print('|')
+                                    print('|')
+                                    print('|')
                                     print('О нет... командир... мы потерпели поражение')
                                     print('Вам оставалось потопить еще', ship_left_first, 'частей кораблей противника')
+                                    time.sleep(4)
                                     game_over = True
                             if not player_turn and gamestarted:
                                 check = False
@@ -430,6 +443,14 @@ while not done:  # смена экранов
                                 elif int(fire_coordinates[1]) == 10:
                                     c = "J"
                                 print('Противник совершил выстрел по координатам', c, '-', int(fire_coordinates[0]))
+                                print('Ожидание результата выстрела')
+                                s = ''
+                                for i in range(21):
+                                    time.sleep(0.025)
+                                    print('\r', 'Загрузка', i * s, str(i * 5), '%', end='')
+                                print('|')
+                                print('|')
+                                print('|')
                                 for i in ships_our:
                                     for j in i:
                                         if j == (col, row) or (j[0], j[1]) == (col, row):
@@ -442,18 +463,23 @@ while not done:  # смена экранов
                                     print("Все ваши корабли остались в том же состоянии, что и до выстрела противника!")
                                 player_turn = True
                                 if ship_left_first == 0:
-                                    print('---')
-                                    print('---')
+                                    print('|')
+                                    print('|')
+                                    print('|')
                                     print('Хорошая работа, командир! Вы победили в этом сражении!')
                                     print('Противнику оставалось потопить еще', ship_left_second, 'частей кораблей')
+                                    time.sleep(4)
                                     game_over = True
                                 if ship_left_second == 0:
-                                    print('---')
-                                    print('---')
+                                    print('|')
+                                    print('|')
+                                    print('|')
                                     print('О нет... командир... противник сумел разгромить наш флот')
                                     print('Вам оставалось потопить еще', ship_left_first, 'частей кораблей противника')
+                                    time.sleep(4)
                                     game_over = True
                                 if not game_over:
+                                    print('|')
                                     print('...ожидание следующих действий...')
                     if event.type == py.MOUSEBUTTONDOWN and event.button == 1 and not gamestarted:  # перемещение
                         # кораблей
