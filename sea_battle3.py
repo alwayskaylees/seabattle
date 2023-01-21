@@ -174,6 +174,7 @@ py.font.init()
 menuScreen = Screen("Menu Screen")
 game_window = Screen("Control")
 window = Screen("Exit")
+end_window = Screen("End Screen")
 menuScreen.make_current_screen()
 MENU_BUTTON = Button(150, 150, 120, 50, "black",
                      "black", "TimesNewRoman",
@@ -184,6 +185,15 @@ MENU_BUTTON2 = Button(185, 55, 130, 50, "white",
 MENU_BUTTON3 = Button(150, 220, 120, 50, "black",
                       "black", "TimesNewRoman",
                       "white", "Quit")
+END_BUTTON_WINNER = Button(250, 200, 130, 50, (128, 166, 255),
+                      (128, 166, 255), "TimesNewRoman",
+                      "black", "You won the sea battle :)")
+END_BUTTON_LOSER = Button(250, 200, 130, 50, (128, 166, 255),
+                      (128, 166, 255), "TimesNewRoman",
+                      "black", "You lose the sea battle :(")
+END_BUTTON = Button(275, 200, 130, 50, (128, 166, 255),
+                      (128, 166, 255), "TimesNewRoman",
+                      "black", "We hope that you will play sea battle again")
 QUIT_BUTTON = Button(150, 300, 120, 50, "black",
                      "black", "TimesNewRoman",
                      "red", "Quit")
@@ -195,6 +205,7 @@ done = False
 while not done:  # смена экранов
     menuScreen.screen_update()
     game_window.screen_update()
+    end_window.screen_update()
     window.screen_update()
     mouse_pos = py.mouse.get_pos()
     mouse_click = py.mouse.get_pressed()
@@ -211,14 +222,22 @@ while not done:  # смена экранов
         if quit_button:
             window.make_current_screen()
             menuScreen.end_current_screen()
-
     elif window.check_update((255, 255, 255)):
         exit_button = QUIT_BUTTON.focus_check(mouse_pos, mouse_click)
         QUIT_BUTTON.show_button(window.return_title())
         QUIT_BUTTON2.show_button(window.return_title())
         if exit_button:
             sys.exit()
-
+    elif end_window.check_update((255, 255, 255)):
+        screen = py.display.set_mode((585, 470))
+        screen.fill((128, 166, 255))
+        py.display.set_caption('End Screen')
+        if winner == 2:
+            END_BUTTON_WINNER.show_button(end_window.return_title())
+        elif winner == 1:
+            END_BUTTON_LOSER.show_button(end_window.return_title())
+        else:
+            END_BUTTON.show_button(end_window.return_title())
     elif game_window.check_update((255, 255, 255)):
         size = 25
         board = 3
@@ -250,10 +269,13 @@ while not done:  # смена экранов
                     y = row * size + (row + 1) * board
                     py.draw.rect(screen, "white", (x, y, size, size))
                     if sheet[col][row] == 'z':  # рисует красный кружок
-                        py.draw.circle(screen, "red", (x + size // 2, y + size // 2), size // 2 - 3)
+                        py.draw.circle(screen, "black", (x + size // 2, y + size // 2), size // 2 - 9)
+                    if sheet[col][row] == 'g':
+                        py.draw.circle(screen, "grey", (x + size // 2, y + size // 2), size // 2 - 9)
                     if sheet[col][row] == 'b':  # рисует черный крест
-                        py.draw.line(screen, 'black', (x, y), (x + 25, y + 25), width=3)
-                        py.draw.line(screen, 'black', (x + 25, y), (x, y + 25), width=3)
+                        py.draw.line(screen, 'red', (x + 2, y + 2), (x + 23, y + 23), width=3)
+                        py.draw.line(screen, 'red', (x + 23, y + 2), (x + 2, y + 23), width=3)
+                        py.draw.rect(screen, 'red', (x, y, 25, 25), width=4)
                 num = font.render(str(row), True, "red")  # цифры
                 letters = font.render(let[row - 1], True, "red")
                 screen.blit(num, (x - 273, y + 4))
@@ -265,10 +287,13 @@ while not done:  # смена экранов
                     y = row * size + (row + 1) * board
                     py.draw.rect(screen, "white", (x, y, size, size))
                     if sheet[col][row] == 'x':  # рисует синий кружок
-                        py.draw.circle(screen, "blue", (x + size // 2, y + size // 2), size // 2 - 3)
+                        py.draw.circle(screen, "black", (x + size // 2, y + size // 2), size // 2 - 9)
+                    if sheet[col][row] == 'g':
+                        py.draw.circle(screen, "grey", (x + size // 2, y + size // 2), size // 2 - 9)
                     if sheet[col][row] == 'b':  # рисует черный крест
-                        py.draw.line(screen, 'black', (x, y), (x + 25, y + 25), width=3)
-                        py.draw.line(screen, 'black', (x + 25, y), (x, y + 25), width=3)
+                        py.draw.line(screen, 'red', (x + 2, y + 2), (x + 23, y + 23), width=3)
+                        py.draw.line(screen, 'red', (x + 23, y + 2), (x + 2, y + 23), width=3)
+                        py.draw.rect(screen, 'red', (x, y, 25, 25), width=4)
 
 
         def main():
@@ -305,6 +330,7 @@ while not done:  # смена экранов
             up1, up2, up3, up4, up5, up6 = False, False, False, False, False, False
             player_turn = True
             while not game_over:
+                winner = 0
                 x_mouse, y_mouse = py.mouse.get_pos()
                 col = x_mouse // (size + board)
                 row = y_mouse // (size + board)
@@ -414,25 +440,35 @@ while not done:  # смена экранов
                                 print('Вы совершили выстрел по координатам', c, '-', row)
                                 print('Ожидание результата выстрела')
                                 s = ''
-                                for i in range(21):
-                                    time.sleep(0.025)
-                                    print('\r', 'Загрузка', i * s, str(i * 5), '%', end='')
+                                for i in range(101):
+                                    print('\r', 'Загрузка', i * s, str(i), '%', end='')
+                                print()
                                 print('|')
                                 print('|')
                                 print('|')
                                 check = False
                                 ships = computer_ships_working
+                                # t = 0 #При подбитии однопалубных кораблей
                                 for i in ships:
+                                    # t += 1 #При подбитии однопалубных кораблей
                                     for j in i:
                                         if j == (col + 1, row):
                                             sheet[col][row] = 'b'  # black
+                                            # if t > 6: #При подбитии однопалубных кораблей
+                                            #     if col != 0:
+                                            #         sheet[col - 1][row] = 'g'  # grey
+                                            #     if row != 0:
+                                            #         sheet[col][row - 1] = 'g'  # grey
+                                            #     if row <= 10:
+                                            #         sheet[col][row + 1] = 'g'  # grey
+                                            #     if col < 10:
+                                            #         sheet[col + 1][row] = 'g'  # grey
                                             check = True
                                             ship_left_first -= 1
                                             print("Часть корабля или весь корабль противника были разрушены!")
                                 if not check:
                                     sheet[col][row] = 'x'  # blue
                                     print("Вы не попали по вражеским кораблям!")
-                                player_turn = False
                                 if ship_left_first == 0:
                                     print('|')
                                     print('|')
@@ -440,7 +476,7 @@ while not done:  # смена экранов
                                     print('Хорошая работа, командир! Вы победили в этом сражении!')
                                     print('Противнику оставалось потопить еще', ship_left_second, 'частей кораблей')
                                     time.sleep(4)
-                                    game_over = True
+                                    return 2
                                 if ship_left_second == 0:
                                     print('|')
                                     print('|')
@@ -448,8 +484,9 @@ while not done:  # смена экранов
                                     print('О нет... командир... мы потерпели поражение')
                                     print('Вам оставалось потопить еще', ship_left_first, 'частей кораблей противника')
                                     time.sleep(4)
-                                    game_over = True
-                            if not player_turn and gamestarted:
+                                    return 1
+                                player_turn = False
+                            if not player_turn and gamestarted and not game_over:
                                 check = False
                                 fire = random.choice(cells)
                                 cells.remove(fire)
@@ -479,9 +516,9 @@ while not done:  # смена экранов
                                 print('Противник совершил выстрел по координатам', c, '-', int(fire_coordinates[1]))
                                 print('Ожидание результата выстрела')
                                 s = ''
-                                for i in range(21):
-                                    time.sleep(0.025)
-                                    print('\r', 'Загрузка', i * s, str(i * 5), '%', end='')
+                                for i in range(101):
+                                    print('\r', 'Загрузка', i * s, str(i), '%', end='')
+                                print()
                                 print('|')
                                 print('|')
                                 print('|')
@@ -503,7 +540,7 @@ while not done:  # смена экранов
                                     print('Хорошая работа, командир! Вы победили в этом сражении!')
                                     print('Противнику оставалось потопить еще', ship_left_second, 'частей кораблей')
                                     time.sleep(4)
-                                    game_over = True
+                                    return 2
                                 if ship_left_second == 0:
                                     print('|')
                                     print('|')
@@ -511,7 +548,7 @@ while not done:  # смена экранов
                                     print('О нет... командир... противник сумел разгромить наш флот')
                                     print('Вам оставалось потопить еще', ship_left_first, 'частей кораблей противника')
                                     time.sleep(4)
-                                    game_over = True
+                                    return 1
                                 if not game_over:
                                     print('|')
                                     print('...ожидание следующих действий...')
@@ -622,42 +659,42 @@ while not done:  # смена экранов
                                 up6 = False
 
                 if not up1:
-                    py.draw.rect(screen, "blue", (x21, y21, 53, size), 3)
+                    py.draw.rect(screen, "blue", (x21, y21, 53, size), 2)
                 if up1:
-                    py.draw.rect(screen, "blue", (x21, y21, size, 53), 3)
+                    py.draw.rect(screen, "blue", (x21, y21, size, 53), 2)
                 if not up2:
-                    py.draw.rect(screen, "blue", (x22, y22, 53, size), 3)
+                    py.draw.rect(screen, "blue", (x22, y22, 53, size), 2)
                 if up2:
-                    py.draw.rect(screen, "blue", (x22, y22, size, 53), 3)
+                    py.draw.rect(screen, "blue", (x22, y22, size, 53), 2)
                 if not up3:
-                    py.draw.rect(screen, "blue", (x23, y23, 53, size), 3)
+                    py.draw.rect(screen, "blue", (x23, y23, 53, size), 2)
                 if up3:
-                    py.draw.rect(screen, "blue", (x23, y23, size, 53), 3)
+                    py.draw.rect(screen, "blue", (x23, y23, size, 53), 2)
                 if not up4:
-                    py.draw.rect(screen, "blue", (x31, y31, 81, size), 3)
+                    py.draw.rect(screen, "blue", (x31, y31, 81, size), 2)
                 if up4:
-                    py.draw.rect(screen, "blue", (x31, y31, size, 81), 3)
+                    py.draw.rect(screen, "blue", (x31, y31, size, 81), 2)
                 if not up5:
-                    py.draw.rect(screen, "blue", (x32, y32, 81, size), 3)
+                    py.draw.rect(screen, "blue", (x32, y32, 81, size), 2)
                 if up5:
-                    py.draw.rect(screen, "blue", (x32, y32, size, 81), 3)
+                    py.draw.rect(screen, "blue", (x32, y32, size, 81), 2)
                 if not up6:
-                    py.draw.rect(screen, "blue", (x41, y41, 109, size), 3)
+                    py.draw.rect(screen, "blue", (x41, y41, 109, size), 2)
                 if up6:
-                    py.draw.rect(screen, "blue", (x41, y41, size, 109), 3)
-                py.draw.rect(screen, "blue", (x11, y11, size, size), 3)
-                py.draw.rect(screen, "blue", (x12, y12, size, size), 3)
-                py.draw.rect(screen, "blue", (x13, y13, size, size), 3)
-                py.draw.rect(screen, "blue", (x14, y14, size, size), 3)
+                    py.draw.rect(screen, "blue", (x41, y41, size, 109), 2)
+                py.draw.rect(screen, "blue", (x11, y11, size, size), 2)
+                py.draw.rect(screen, "blue", (x12, y12, size, size), 2)
+                py.draw.rect(screen, "blue", (x13, y13, size, size), 2)
+                py.draw.rect(screen, "blue", (x14, y14, size, size), 2)
                 py.display.flip()
                 screen.blit(fon, (0, 0))
                 greed()
                 button()
 
 
-        main()
+        winner = main()
         game_window.end_current_screen()
-        menuScreen.make_current_screen()
+        end_window.make_current_screen()
     for event in py.event.get():
         if event.type == py.QUIT:
             done = True
