@@ -3,7 +3,6 @@ import sys
 import os
 import random
 import copy
-import time
 
 
 class Screen:
@@ -308,29 +307,18 @@ while not done:  # смена экранов
             fon = py.transform.scale(load_image('fon.jpg'), (585, 470))
             screen.blit(fon, (0, 0))
             x11, y11 = 115, 320  # корабли 1 клетка
-            x11_new, y11_new = 0, 0
             x12, y12 = 115, 385
-            x12_new, y12_new = 0, 0
             x13, y13 = 152, 320
-            x13_new, y13_new = 0, 0
             x14, y14 = 152, 385
-            x14_new, y14_new = 0, 0
             x21, y21 = 190, 320  # корабли в 2 клетки
-            x21_new, y21_new = 0, 0
             x22, y22 = 190, 385
-            x22_new, y22_new = 0, 0
             x23, y23 = 253, 320
-            x23_new, y23_new = 0, 0
             x31, y31 = 253, 385
-            x31_new, y31_new = 0, 0
             x32, y32 = 345, 385
-            x32_new, y32_new = 0, 0
             x41, y41 = 317, 320
-            x41_new, y41_new = 0, 0
             up1, up2, up3, up4, up5, up6 = False, False, False, False, False, False
             player_turn = True
             while not game_over:
-                winner = 0
                 x_mouse, y_mouse = py.mouse.get_pos()
                 col = x_mouse // (size + board)
                 row = y_mouse // (size + board)
@@ -477,7 +465,6 @@ while not done:  # смена экранов
                                     print('|')
                                     print('Хорошая работа, командир! Вы победили в этом сражении!')
                                     print('Противнику оставалось потопить еще', ship_left_second, 'частей кораблей')
-                                    time.sleep(4)
                                     return 2
                                 if ship_left_second == 0:
                                     print('|')
@@ -485,7 +472,6 @@ while not done:  # смена экранов
                                     print('|')
                                     print('О нет... командир... мы потерпели поражение')
                                     print('Вам оставалось потопить еще', ship_left_first, 'частей кораблей противника')
-                                    time.sleep(4)
                                     return 1
                                 if not hit:
                                     player_turn = False
@@ -549,7 +535,6 @@ while not done:  # смена экранов
                                 print('|')
                                 print('Хорошая работа, командир! Вы победили в этом сражении!')
                                 print('Противнику оставалось потопить еще', ship_left_second, 'частей кораблей')
-                                time.sleep(4)
                                 return 2
                             if ship_left_second == 0:
                                 print('|')
@@ -557,7 +542,6 @@ while not done:  # смена экранов
                                 print('|')
                                 print('О нет... командир... противник сумел разгромить наш флот')
                                 print('Вам оставалось потопить еще', ship_left_first, 'частей кораблей противника')
-                                time.sleep(4)
                                 return 1
                             if not game_over:
                                 print('|')
@@ -594,44 +578,24 @@ while not done:  # смена экранов
                         if sheet[col][row] == 0:
                             if col > 10 or row > 10:
                                 if moving11:
-                                    x11_new, y11_new = event.rel
-                                    x11, y11 = x11 + x11_new, y11 + y11_new
                                     x11, y11 = x, y
                                 if moving12:
-                                    x12_new, y12_new = event.rel
-                                    x12, y12 = x12 + x12_new, y12 + y12_new
                                     x12, y12 = x, y
                                 if moving13:
-                                    x13_new, y13_new = event.rel
-                                    x13, y13 = x13 + x13_new, y13 + y13_new
                                     x13, y13 = x, y
                                 if moving14:
-                                    x14_new, y14_new = event.rel
-                                    x14, y14 = x14 + x14_new, y14 + y14_new
                                     x14, y14 = x, y
                                 if moving21:
-                                    x21_new, y21_new = event.rel
-                                    x21, y21 = x21 + x21_new, y21 + y21_new
                                     x21, y21 = x, y
                                 if moving22:
-                                    x22_new, y22_new = event.rel
-                                    x22, y22 = x22 + x22_new, y22 + y22_new
                                     x22, y22 = x, y
                                 if moving23:
-                                    x23_new, y23_new = event.rel
-                                    x23, y23 = x23 + x23_new, y23 + y23_new
                                     x23, y23 = x, y
                                 if moving31:
-                                    x31_new, y31_new = event.rel
-                                    x31, y31 = x31 + x31_new, y31 + y31_new
                                     x31, y31 = x, y
                                 if moving32:
-                                    x32_new, y32_new = event.rel
-                                    x32, y32 = x32 + x32_new, y32 + y32_new
                                     x32, y32 = x, y
                                 if moving41:
-                                    x41_new, y41_new = event.rel
-                                    x41, y41 = x41 + x41_new, y41 + y41_new
                                     x41, y41 = x, y
                     if event.type == py.MOUSEBUTTONUP and event.button == 1:  # продолжение перемещения кораблей
                         moving11, moving12, moving13, moving14, moving21 = False, False, False, False, False
