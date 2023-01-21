@@ -186,14 +186,14 @@ MENU_BUTTON3 = Button(150, 220, 120, 50, "black",
                       "black", "TimesNewRoman",
                       "white", "Quit")
 END_BUTTON_WINNER = Button(250, 200, 130, 50, (128, 166, 255),
-                      (128, 166, 255), "TimesNewRoman",
-                      "black", "You won the sea battle :)")
+                           (128, 166, 255), "TimesNewRoman",
+                           "black", "You won the sea battle :)")
 END_BUTTON_LOSER = Button(250, 200, 130, 50, (128, 166, 255),
-                      (128, 166, 255), "TimesNewRoman",
-                      "black", "You lose the sea battle :(")
+                          (128, 166, 255), "TimesNewRoman",
+                          "black", "You lose the sea battle :(")
 END_BUTTON = Button(275, 200, 130, 50, (128, 166, 255),
-                      (128, 166, 255), "TimesNewRoman",
-                      "black", "We hope that you will play sea battle again")
+                    (128, 166, 255), "TimesNewRoman",
+                    "black", "We hope that you will play sea battle again")
 QUIT_BUTTON = Button(150, 300, 120, 50, "black",
                      "black", "TimesNewRoman",
                      "red", "Quit")
@@ -502,7 +502,7 @@ while not done:  # смена экранов
                             if int(fire_coordinates[0]) == 1:
                                 c = "A"
                             elif int(fire_coordinates[0]) == 2:
-                                 c = "B"
+                                c = "B"
                             elif int(fire_coordinates[0]) == 3:
                                 c = "C"
                             elif int(fire_coordinates[0]) == 4:
